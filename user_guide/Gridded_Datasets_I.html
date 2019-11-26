@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<meta charset="utf-8"/>
+<title>Gridded Datasets I — GeoViews 1.6.6.post1+g004fa81 documentation</title>
+<meta content="Geographic visualizations for HoloViews." name="description"/>
+<meta content="HoloViz Developers" name="author"/>
+<!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+<script>
+    WebFont.load({
+      google: {
+        families: ['Source Sans Pro']
+      }
+    });
+  </script>
+<!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link href="../_static/css/main.css" rel="stylesheet"/>
+<link href="../_static/nbsite.css" rel="stylesheet"/>
+<link href="../_static/custom.css" rel="stylesheet"/>
+<!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript">
+</script>
+<script src="../_static/js/main.js"></script>
+<script src="../_static/nbsite.js"></script>
+<script src="../_static/require.js"></script>
+<!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link href="../_static/favicon.ico" rel="icon" type="image/png"/>
+<!-- Canonical
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link href="/user_guide/Gridded_Datasets_I.html" rel="canonical">
+</link></head>
+<body class="">
+<header class="navigation">
+<div class="wrapper">
+<a class="logo" href="../index.html">
+<img alt="Logo" src="../_static/logo_horizontal.png"/>
+</a>
+<a class="navigation-menu-button" href="javascript:void(0)" id="js-mobile-menu">Menu</a>
+<nav>
+<ul class="navigation-menu show" id="js-navigation-menu">
+<li class="nav-link doc-head"><a href="//gitter.im/pyviz/pyviz">Gitter</a></li>
+<li class="nav-link doc-head"><a href="//twitter.com/holoviz_org">Twitter</a></li>
+<li class="nav-link doc-head"><a href="//github.com/holoviz/geoviews">Github</a></li>
+<li class="nav-link">
+<div style="display:inline-block;vertical-align: middle;">
+<div class="search-bar">
+<form action="../search.html" method="get" role="search">
+<input name="q" placeholder="Search" type="search"/>
+<button type="submit">
+<img alt="Search Icon" src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/search-icon-black.png"/>
+</button>
+</form>
+</div>
+</div>
+</li>
+</ul>
+</nav>
+</div>
+</header>
+<div class="second-nav">
+<nav>
+<ul class="navigation-menu show">
+<li class="nav-link doc-head"><a href="index.html">User Guide</a></li>
+<li class="nav-link doc-head"><a href="../gallery/index.html">Gallery</a></li>
+<li class="nav-link doc-head"><a href="../topics.html">Topics</a></li>
+<li class="nav-link doc-head"><a href="../about.html">About</a></li>
+</ul>
+</nav>
+</div>
+<!-- MAIN BODY OF DOCS –––––––––––––––––– -->
+<div class="docs section">
+<div id="hacketyhackhack"> <!-- style="width:20%;margin-right: 100px;"> --> <!--style="display: none;"> style="display:none;"> -->
+<div class="toc" style="width:15%; margin-right:20px;">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Projections.html">Projections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Geometries.html">Geometries</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Gridded Datasets I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Gridded_Datasets_II.html">Gridded Datasets II</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Working_with_Bokeh.html">Working with Bokeh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Resampling_Grids.html">Resampling Grids</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../topics.html">Topics</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/holoviz/geoviews">Github Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+</ul>
+</div>
+</div>
+<div class="content"> <!-- style="max-width:80%;margin-left:auto;margin-right: auto;">-->
+<div class="section" id="gridded-datasets-i">
+<h1>Gridded Datasets I<a class="headerlink" href="#gridded-datasets-i" title="Permalink to this headline">¶</a></h1>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>GeoViews is designed to make full use of multidimensional gridded datasets stored in netCDF or other common formats, via the xarray and iris interfaces in HoloViews. This notebook will demonstrate how to load data using both of these data backends, along with some of their individual quirks. The data used in this notebook was originally shipped as part of the <a href="https://github.com/SciTools/iris-sample-data"><code>SciTools/iris-sample-data</code></a> repository, but a smaller netCDF file is included as part of the GeoViews so that it can be used with xarray as well.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [1]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">iris</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">holoviews</span> <span class="k">as</span> <span class="nn">hv</span>
+<span class="kn">import</span> <span class="nn">geoviews</span> <span class="k">as</span> <span class="nn">gv</span>
+<span class="kn">import</span> <span class="nn">geoviews.feature</span> <span class="k">as</span> <span class="nn">gf</span>
+
+<span class="kn">from</span> <span class="nn">cartopy</span> <span class="k">import</span> <span class="n">crs</span>
+<span class="kn">from</span> <span class="nn">geoviews</span> <span class="k">import</span> <span class="n">opts</span>
+
+<span class="n">gv</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">'matplotlib'</span><span class="p">)</span>
+
+<span class="n">gv</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_html rendered_html output_subarea">
+<link href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+<style>div.hololayout {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+div.holoframe {
+  width: 75%;
+}
+
+div.holowell {
+  display: flex;
+  align-items: center;
+}
+
+form.holoform {
+  background-color: #fafafa;
+  border-radius: 5px;
+  overflow: hidden;
+  padding-left: 0.8em;
+  padding-right: 0.8em;
+  padding-top: 0.4em;
+  padding-bottom: 0.4em;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  border: 1px solid #e3e3e3;
+}
+
+div.holowidgets {
+  padding-right: 0;
+  width: 25%;
+}
+
+div.holoslider {
+  min-height: 0 !important;
+  height: 0.8em;
+  width: 100%;
+}
+
+div.holoformgroup {
+  padding-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+div.hologroup {
+  padding-left: 0;
+  padding-right: 0.8em;
+  width: 100%;
+}
+
+.holoselect {
+  width: 92%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.holotext {
+  padding-left:  0.5em;
+  padding-right: 0;
+  width: 100%;
+}
+
+.holowidgets .ui-resizable-se {
+  visibility: hidden
+}
+
+.holoframe > .ui-resizable-se {
+  visibility: hidden
+}
+
+.holowidgets .ui-resizable-s {
+  visibility: hidden
+}
+
+
+/* CSS rules for noUISlider based slider used by JupyterLab extension  */
+
+.noUi-handle {
+  width: 20px !important;
+  height: 20px !important;
+  left: -5px !important;
+  top: -5px !important;
+}
+
+.noUi-handle:before, .noUi-handle:after {
+  visibility: hidden;
+  height: 0px;
+}
+
+.noUi-target {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+</style>
+<div class="logo-block">
+<img src="data:image/png;base64,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
+roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inline-block; float: left; vertical-align: middle"/>
+<img src="data:image/png;base64,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" style="height:15px; border-radius:12px; display: inline-block; float: left"/>
+</div>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div id="3aeb0045-a150-4782-bcc5-56fa6693b22a"></div>
+<div class="output_subarea output_javascript">
+<script type="text/javascript">
+var element = $('#3aeb0045-a150-4782-bcc5-56fa6693b22a');
+function HoloViewsWidget() {
+}
+
+HoloViewsWidget.prototype.init_slider = function(init_val){
+  if(this.load_json) {
+    this.from_json()
+  } else {
+    this.update_cache();
+  }
+}
+
+HoloViewsWidget.prototype.populate_cache = function(idx){
+  this.cache[idx].innerHTML = this.frames[idx];
+  if (this.embed) {
+    delete this.frames[idx];
+  }
+}
+
+HoloViewsWidget.prototype.process_error = function(msg){
+}
+
+HoloViewsWidget.prototype.from_json = function() {
+  var data_url = this.json_path + this.id + '.json';
+  $.getJSON(data_url, $.proxy(function(json_data) {
+    this.frames = json_data;
+    this.update_cache();
+    this.update(0);
+  }, this));
+}
+
+HoloViewsWidget.prototype.dynamic_update = function(current){
+  if (current === undefined) {
+    return
+  }
+  this.current = current;
+  if (this.comm) {
+    var msg = {comm_id: this.id+'_client', content: current}
+    this.comm.send(msg);
+  }
+}
+
+HoloViewsWidget.prototype.update_cache = function(force){
+  var frame_len = Object.keys(this.frames).length;
+  for (var i=0; i<frame_len; i++) {
+    if(!this.load_json || this.dynamic)  {
+      var frame = Object.keys(this.frames)[i];
+    } else {
+      var frame = i;
+    }
+    if(!(frame in this.cache) || force) {
+      if ((frame in this.cache) && force) { this.cache[frame].remove() }
+      var div = document.createElement("div");
+      var parent = document.getElementById("_anim_img"+this.id);
+      div.style.display = "none";
+      parent.appendChild(div)
+      this.cache[frame] = div;
+      var cache_id = "_anim_img"+this.id+"_"+frame;
+      this.populate_cache(frame);
+    }
+  }
+}
+
+HoloViewsWidget.prototype.update = function(current){
+  if(current in this.cache) {
+    for (var index in this.cache) {
+      this.cache[index].style.display = "none";
+    }
+    this.cache[current].style.display = "";
+    this.wait = false;
+  }
+}
+
+HoloViewsWidget.prototype.init_comms = function() {
+  var that = this
+  HoloViews.comm_manager.register_target(this.plot_id, this.id, function (msg) { that.msg_handler(msg) })
+  if (!this.cached || this.dynamic) {
+    function ack_callback(msg) {
+      var msg = msg.metadata;
+      var comm_id = msg.comm_id;
+      var comm_status = HoloViews.comm_status[comm_id];
+      if (that.queue.length > 0) {
+        that.time = Date.now();
+        that.dynamic_update(that.queue[that.queue.length-1]);
+        that.queue = [];
+      } else {
+        that.wait = false;
+      }
+      if ((msg.msg_type == "Ready") && msg.content) {
+        console.log("Python callback returned following output:", msg.content);
+      } else if (msg.msg_type == "Error") {
+        console.log("Python failed with the following traceback:", msg.traceback)
+      }
+    }
+    var comm = HoloViews.comm_manager.get_client_comm(this.plot_id, this.id+'_client', ack_callback);
+    return comm
+  }
+}
+
+HoloViewsWidget.prototype.msg_handler = function(msg) {
+  var metadata = msg.metadata;
+  if ((metadata.msg_type == "Ready")) {
+    if (metadata.content) {
+      console.log("Python callback returned following output:", metadata.content);
+    }
+	return;
+  } else if (metadata.msg_type == "Error") {
+    console.log("Python failed with the following traceback:", metadata.traceback)
+    return
+  }
+  this.process_msg(msg)
+}
+
+HoloViewsWidget.prototype.process_msg = function(msg) {
+}
+
+function SelectionWidget(frames, id, slider_ids, keyMap, dim_vals, notFound, load_json, mode, cached, json_path, dynamic, plot_id){
+  this.frames = frames;
+  this.id = id;
+  this.plot_id = plot_id;
+  this.slider_ids = slider_ids;
+  this.keyMap = keyMap
+  this.current_frame = 0;
+  this.current_vals = dim_vals;
+  this.load_json = load_json;
+  this.mode = mode;
+  this.notFound = notFound;
+  this.cached = cached;
+  this.dynamic = dynamic;
+  this.cache = {};
+  this.json_path = json_path;
+  this.init_slider(this.current_vals[0]);
+  this.queue = [];
+  this.wait = false;
+  if (!this.cached || this.dynamic) {
+    this.comm = this.init_comms();
+  }
+}
+
+SelectionWidget.prototype = new HoloViewsWidget;
+
+
+SelectionWidget.prototype.get_key = function(current_vals) {
+  var key = "(";
+  for (var i=0; i<this.slider_ids.length; i++)
+  {
+    var val = this.current_vals[i];
+    if (!(typeof val === 'string')) {
+      if (val % 1 === 0) { val = val.toFixed(1); }
+      else { val = val.toFixed(10); val = val.slice(0, val.length-1);}
+    }
+    key += "'" + val + "'";
+    if(i != this.slider_ids.length-1) { key += ', ';}
+    else if(this.slider_ids.length == 1) { key += ',';}
+  }
+  key += ")";
+  return this.keyMap[key];
+}
+
+SelectionWidget.prototype.set_frame = function(dim_val, dim_idx){
+  this.current_vals[dim_idx] = dim_val;
+  var key = this.current_vals;
+  if (!this.dynamic) {
+    key = this.get_key(key)
+  }
+  if (this.dynamic || !this.cached) {
+    if ((this.time !== undefined) && ((this.wait) && ((this.time + 10000) > Date.now()))) {
+      this.queue.push(key);
+      return
+    }
+    this.queue = [];
+    this.time = Date.now();
+    this.current_frame = key;
+    this.wait = true;
+    this.dynamic_update(key)
+  } else if (key !== undefined) {
+    this.update(key)
+  }
+}
+
+
+/* Define the ScrubberWidget class */
+function ScrubberWidget(frames, num_frames, id, interval, load_json, mode, cached, json_path, dynamic, plot_id){
+  this.slider_id = "_anim_slider" + id;
+  this.loop_select_id = "_anim_loop_select" + id;
+  this.id = id;
+  this.plot_id = plot_id;
+  this.interval = interval;
+  this.current_frame = 0;
+  this.direction = 0;
+  this.dynamic = dynamic;
+  this.timer = null;
+  this.load_json = load_json;
+  this.mode = mode;
+  this.cached = cached;
+  this.frames = frames;
+  this.cache = {};
+  this.length = num_frames;
+  this.json_path = json_path;
+  document.getElementById(this.slider_id).max = this.length - 1;
+  this.init_slider(0);
+  this.wait = false;
+  this.queue = [];
+  if (!this.cached || this.dynamic) {
+    this.comm = this.init_comms()
+  }
+}
+
+ScrubberWidget.prototype = new HoloViewsWidget;
+
+ScrubberWidget.prototype.set_frame = function(frame){
+  this.current_frame = frame;
+  var widget = document.getElementById(this.slider_id);
+  if (widget === null) {
+    this.pause_animation();
+    return
+  }
+  widget.value = this.current_frame;
+  if (this.dynamic || !this.cached) {
+    if ((this.time !== undefined) && ((this.wait) && ((this.time + 10000) > Date.now()))) {
+      this.queue.push(frame);
+      return
+    }
+    this.queue = [];
+    this.time = Date.now();
+    this.wait = true;
+    this.dynamic_update(frame)
+  } else {
+    this.update(frame)
+  }
+}
+
+ScrubberWidget.prototype.get_loop_state = function(){
+  var button_group = document[this.loop_select_id].state;
+  for (var i = 0; i < button_group.length; i++) {
+    var button = button_group[i];
+    if (button.checked) {
+      return button.value;
+    }
+  }
+  return undefined;
+}
+
+
+ScrubberWidget.prototype.next_frame = function() {
+  this.set_frame(Math.min(this.length - 1, this.current_frame + 1));
+}
+
+ScrubberWidget.prototype.previous_frame = function() {
+  this.set_frame(Math.max(0, this.current_frame - 1));
+}
+
+ScrubberWidget.prototype.first_frame = function() {
+  this.set_frame(0);
+}
+
+ScrubberWidget.prototype.last_frame = function() {
+  this.set_frame(this.length - 1);
+}
+
+ScrubberWidget.prototype.slower = function() {
+  this.interval /= 0.7;
+  if(this.direction > 0){this.play_animation();}
+  else if(this.direction < 0){this.reverse_animation();}
+}
+
+ScrubberWidget.prototype.faster = function() {
+  this.interval *= 0.7;
+  if(this.direction > 0){this.play_animation();}
+  else if(this.direction < 0){this.reverse_animation();}
+}
+
+ScrubberWidget.prototype.anim_step_forward = function() {
+  if(this.current_frame < this.length - 1){
+    this.next_frame();
+  }else{
+    var loop_state = this.get_loop_state();
+    if(loop_state == "loop"){
+      this.first_frame();
+    }else if(loop_state == "reflect"){
+      this.last_frame();
+      this.reverse_animation();
+    }else{
+      this.pause_animation();
+      this.last_frame();
+    }
+  }
+}
+
+ScrubberWidget.prototype.anim_step_reverse = function() {
+  if(this.current_frame > 0){
+    this.previous_frame();
+  } else {
+    var loop_state = this.get_loop_state();
+    if(loop_state == "loop"){
+      this.last_frame();
+    }else if(loop_state == "reflect"){
+      this.first_frame();
+      this.play_animation();
+    }else{
+      this.pause_animation();
+      this.first_frame();
+    }
+  }
+}
+
+ScrubberWidget.prototype.pause_animation = function() {
+  this.direction = 0;
+  if (this.timer){
+    clearInterval(this.timer);
+    this.timer = null;
+  }
+}
+
+ScrubberWidget.prototype.play_animation = function() {
+  this.pause_animation();
+  this.direction = 1;
+  var t = this;
+  if (!this.timer) this.timer = setInterval(function(){t.anim_step_forward();}, this.interval);
+}
+
+ScrubberWidget.prototype.reverse_animation = function() {
+  this.pause_animation();
+  this.direction = -1;
+  var t = this;
+  if (!this.timer) this.timer = setInterval(function(){t.anim_step_reverse();}, this.interval);
+}
+
+function extend(destination, source) {
+  for (var k in source) {
+    if (source.hasOwnProperty(k)) {
+      destination[k] = source[k];
+    }
+  }
+  return destination;
+}
+
+function update_widget(widget, values) {
+  if (widget.hasClass("ui-slider")) {
+    widget.slider('option', {
+      min: 0,
+      max: values.length-1,
+      dim_vals: values,
+      value: 0,
+      dim_labels: values
+    })
+    widget.slider('option', 'slide').call(widget, event, {value: 0})
+  } else {
+    widget.empty();
+    for (var i=0; i<values.length; i++){
+      widget.append($("<option>", {
+        value: i,
+        text: values[i]
+      }))
+    };
+    widget.data('values', values);
+    widget.data('value', 0);
+    widget.trigger("change");
+  };
+}
+
+function init_slider(id, plot_id, dim, values, next_vals, labels, dynamic, step, value, next_dim,
+                     dim_idx, delay, jQueryUI_CDN, UNDERSCORE_CDN) {
+  // Slider JS Block START
+  function loadcssfile(filename){
+    var fileref=document.createElement("link")
+    fileref.setAttribute("rel", "stylesheet")
+    fileref.setAttribute("type", "text/css")
+    fileref.setAttribute("href", filename)
+    document.getElementsByTagName("head")[0].appendChild(fileref)
+  }
+  loadcssfile("https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css");
+  /* Check if jQuery and jQueryUI have been loaded
+     otherwise load with require.js */
+  var jQuery = window.jQuery,
+    // check for old versions of jQuery
+    oldjQuery = jQuery && !!jQuery.fn.jquery.match(/^1\.[0-4](\.|$)/),
+    jquery_path = '',
+    paths = {},
+    noConflict;
+  var jQueryUI = jQuery.ui;
+  // check for jQuery
+  if (!jQuery || oldjQuery) {
+    // load if it's not available or doesn't meet min standards
+    paths.jQuery = jQuery;
+    noConflict = !!oldjQuery;
+  } else {
+    // register the current jQuery
+    define('jquery', [], function() { return jQuery; });
+  }
+  if (!jQueryUI) {
+    paths.jQueryUI = jQueryUI_CDN.slice(null, -3);
+  } else {
+    define('jQueryUI', [], function() { return jQuery.ui; });
+  }
+  paths.underscore = UNDERSCORE_CDN.slice(null, -3);
+  var jquery_require = {
+    paths: paths,
+    shim: {
+      "jQueryUI": {
+        exports:"$",
+        deps: ['jquery']
+      },
+      "underscore": {
+        exports: '_'
+      }
+    }
+  }
+  require.config(jquery_require);
+  require(["jQueryUI", "underscore"], function(jUI, _){
+    if (noConflict) $.noConflict(true);
+    var vals = values;
+    if (dynamic && vals.constructor === Array) {
+      var default_value = parseFloat(value);
+      var min = parseFloat(vals[0]);
+      var max = parseFloat(vals[vals.length-1]);
+      var wstep = step;
+      var wlabels = [default_value];
+      var init_label = default_value;
+    } else {
+      var min = 0;
+      if (dynamic) {
+        var max = Object.keys(vals).length - 1;
+        var init_label = labels[value];
+        var default_value = values[value];
+      } else {
+        var max = vals.length - 1;
+        var init_label = labels[value];
+        var default_value = value;
+      }
+      var wstep = 1;
+      var wlabels = labels;
+    }
+    function adjustFontSize(text) {
+      var width_ratio = (text.parent().width()/8)/text.val().length;
+      var size = Math.min(0.9, Math.max(0.6, width_ratio))+'em';
+      text.css('font-size', size);
+    }
+    var slider = $('#_anim_widget'+id+'_'+dim);
+    slider.slider({
+      animate: "fast",
+      min: min,
+      max: max,
+      step: wstep,
+      value: default_value,
+      dim_vals: vals,
+      dim_labels: wlabels,
+      next_vals: next_vals,
+      slide: function(event, ui) {
+        var vals = slider.slider("option", "dim_vals");
+        var next_vals = slider.slider("option", "next_vals");
+        var dlabels = slider.slider("option", "dim_labels");
+        if (dynamic) {
+          var dim_val = ui.value;
+          if (vals.constructor === Array) {
+            var label = ui.value;
+          } else {
+            var label = dlabels[ui.value];
+          }
+        } else {
+          var dim_val = vals[ui.value];
+          var label = dlabels[ui.value];
+        }
+        var text = $('#textInput'+id+'_'+dim);
+        text.val(label);
+        adjustFontSize(text);
+        HoloViews.index[plot_id].set_frame(dim_val, dim_idx);
+        if (Object.keys(next_vals).length > 0) {
+          var new_vals = next_vals[dim_val];
+          var next_widget = $('#_anim_widget'+id+'_'+next_dim);
+          update_widget(next_widget, new_vals);
+        }
+      }
+    });
+    slider.keypress(function(event) {
+      if (event.which == 80 || event.which == 112) {
+        var start = slider.slider("option", "value");
+        var stop =  slider.slider("option", "max");
+        for (var i=start; i<=stop; i++) {
+          var delay = i*delay;
+          $.proxy(function doSetTimeout(i) { setTimeout($.proxy(function() {
+            var val = {value:i};
+            slider.slider('value',i);
+            slider.slider("option", "slide")(null, val);
+          }, slider), delay);}, slider)(i);
+        }
+      }
+      if (event.which == 82 || event.which == 114) {
+        var start = slider.slider("option", "value");
+        var stop =  slider.slider("option", "min");
+        var count = 0;
+        for (var i=start; i>=stop; i--) {
+          var delay = count*delay;
+          count = count + 1;
+          $.proxy(function doSetTimeout(i) { setTimeout($.proxy(function() {
+            var val = {value:i};
+            slider.slider('value',i);
+            slider.slider("option", "slide")(null, val);
+          }, slider), delay);}, slider)(i);
+        }
+      }
+    });
+    var textInput = $('#textInput'+id+'_'+dim)
+    textInput.val(init_label);
+    adjustFontSize(textInput);
+  });
+}
+
+function init_dropdown(id, plot_id, dim, vals, value, next_vals, labels, next_dim, dim_idx, dynamic) {
+  var widget = $("#_anim_widget"+id+'_'+dim);
+  widget.data('values', vals)
+  for (var i=0; i<vals.length; i++){
+    if (dynamic) {
+      var val = vals[i];
+    } else {
+      var val = i;
+    }
+    widget.append($("<option>", {
+      value: val,
+      text: labels[i]
+    }));
+  };
+  widget.data("next_vals", next_vals);
+  widget.val(value);
+  widget.on('change', function(event, ui) {
+    if (dynamic) {
+      var dim_val = parseInt(this.value);
+    } else {
+      var dim_val = $.data(this, 'values')[this.value];
+    }
+    var next_vals = $.data(this, "next_vals");
+    if (Object.keys(next_vals).length > 0) {
+      var new_vals = next_vals[dim_val];
+      var next_widget = $('#_anim_widget'+id+'_'+next_dim);
+      update_widget(next_widget, new_vals);
+    }
+    var widgets = HoloViews.index[plot_id]
+    if (widgets) {
+      widgets.set_frame(dim_val, dim_idx);
+    }
+  });
+}
+
+
+if (window.HoloViews === undefined) {
+  window.HoloViews = {}
+  window.PyViz = window.HoloViews
+} else if (window.PyViz === undefined) {
+  window.PyViz = window.HoloViews
+}
+
+
+var _namespace = {
+  init_slider: init_slider,
+  init_dropdown: init_dropdown,
+  comms: {},
+  comm_status: {},
+  index: {},
+  plot_index: {},
+  kernels: {},
+  receivers: {}
+}
+
+for (var k in _namespace) {
+  if (!(k in window.HoloViews)) {
+    window.HoloViews[k] = _namespace[k];
+  }
+}
+
+// Define MPL specific subclasses
+function MPLSelectionWidget() {
+  SelectionWidget.apply(this, arguments);
+}
+
+function MPLScrubberWidget() {
+  ScrubberWidget.apply(this, arguments);
+}
+
+// Let them inherit from the baseclasses
+MPLSelectionWidget.prototype = Object.create(SelectionWidget.prototype);
+MPLScrubberWidget.prototype = Object.create(ScrubberWidget.prototype);
+
+// Define methods to override on widgets
+var MPLMethods = {
+  init_slider : function(init_val){
+    if(this.load_json) {
+      this.from_json()
+    } else {
+      this.update_cache();
+    }
+    if (this.dynamic | !this.cached | (this.current_vals === undefined)) {
+      this.update(0)
+    } else {
+      this.set_frame(this.current_vals[0], 0)
+    }
+  },
+  process_msg : function(msg) {
+    var data = msg.content.data;
+    this.frames[this.current] = data;
+    this.update_cache(true);
+    this.update(this.current);
+  }
+}
+// Extend MPL widgets with backend specific methods
+extend(MPLSelectionWidget.prototype, MPLMethods);
+extend(MPLScrubberWidget.prototype, MPLMethods);
+
+window.HoloViews.MPLSelectionWidget = MPLSelectionWidget
+window.HoloViews.MPLScrubberWidget = MPLScrubberWidget
+
+    function JupyterCommManager() {
+    }
+
+    JupyterCommManager.prototype.register_target = function(plot_id, comm_id, msg_handler) {
+      if (window.comm_manager || ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null))) {
+        var comm_manager = window.comm_manager || Jupyter.notebook.kernel.comm_manager;
+        comm_manager.register_target(comm_id, function(comm) {
+          comm.on_msg(msg_handler);
+        });
+      } else if ((plot_id in window.PyViz.kernels) && (window.PyViz.kernels[plot_id])) {
+        window.PyViz.kernels[plot_id].registerCommTarget(comm_id, function(comm) {
+          comm.onMsg = msg_handler;
+        });
+      }
+    }
+
+    JupyterCommManager.prototype.get_client_comm = function(plot_id, comm_id, msg_handler) {
+      if (comm_id in window.PyViz.comms) {
+        return window.PyViz.comms[comm_id];
+      } else if (window.comm_manager || ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null))) {
+        var comm_manager = window.comm_manager || Jupyter.notebook.kernel.comm_manager;
+        var comm = comm_manager.new_comm(comm_id, {}, {}, {}, comm_id);
+        if (msg_handler) {
+          comm.on_msg(msg_handler);
+        }
+      } else if ((plot_id in window.PyViz.kernels) && (window.PyViz.kernels[plot_id])) {
+        var comm = window.PyViz.kernels[plot_id].connectToComm(comm_id);
+        comm.open();
+        if (msg_handler) {
+          comm.onMsg = msg_handler;
+        }
+      }
+
+      window.PyViz.comms[comm_id] = comm;
+      return comm;
+    }
+
+    window.PyViz.comm_manager = new JupyterCommManager();
+    
+
+var JS_MIME_TYPE = 'application/javascript';
+var HTML_MIME_TYPE = 'text/html';
+var EXEC_MIME_TYPE = 'application/vnd.holoviews_exec.v0+json';
+var CLASS_NAME = 'output';
+
+/**
+ * Render data to the DOM node
+ */
+function render(props, node) {
+  var div = document.createElement("div");
+  var script = document.createElement("script");
+  node.appendChild(div);
+  node.appendChild(script);
+}
+
+/**
+ * Handle when a new output is added
+ */
+function handle_add_output(event, handle) {
+  var output_area = handle.output_area;
+  var output = handle.output;
+  if ((output.data == undefined) || (!output.data.hasOwnProperty(EXEC_MIME_TYPE))) {
+    return
+  }
+  var id = output.metadata[EXEC_MIME_TYPE]["id"];
+  var toinsert = output_area.element.find("." + CLASS_NAME.split(' ')[0]);
+  if (id !== undefined) {
+    var nchildren = toinsert.length;
+    var html_node = toinsert[nchildren-1].children[0];
+    html_node.innerHTML = output.data[HTML_MIME_TYPE];
+    var scripts = [];
+    var nodelist = html_node.querySelectorAll("script");
+    for (var i in nodelist) {
+      if (nodelist.hasOwnProperty(i)) {
+        scripts.push(nodelist[i])
+      }
+    }
+
+    scripts.forEach( function (oldScript) {
+      var newScript = document.createElement("script");
+      var attrs = [];
+      var nodemap = oldScript.attributes;
+      for (var j in nodemap) {
+        if (nodemap.hasOwnProperty(j)) {
+          attrs.push(nodemap[j])
+        }
+      }
+      attrs.forEach(function(attr) { newScript.setAttribute(attr.name, attr.value) });
+      newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+    if (JS_MIME_TYPE in output.data) {
+      toinsert[nchildren-1].children[1].textContent = output.data[JS_MIME_TYPE];
+    }
+    output_area._hv_plot_id = id;
+    if ((window.Bokeh !== undefined) && (id in Bokeh.index)) {
+      window.PyViz.plot_index[id] = Bokeh.index[id];
+    } else {
+      window.PyViz.plot_index[id] = null;
+    }
+  } else if (output.metadata[EXEC_MIME_TYPE]["server_id"] !== undefined) {
+    var bk_div = document.createElement("div");
+    bk_div.innerHTML = output.data[HTML_MIME_TYPE];
+    var script_attrs = bk_div.children[0].attributes;
+    for (var i = 0; i < script_attrs.length; i++) {
+      toinsert[toinsert.length - 1].childNodes[1].setAttribute(script_attrs[i].name, script_attrs[i].value);
+    }
+    // store reference to server id on output_area
+    output_area._bokeh_server_id = output.metadata[EXEC_MIME_TYPE]["server_id"];
+  }
+}
+
+/**
+ * Handle when an output is cleared or removed
+ */
+function handle_clear_output(event, handle) {
+  var id = handle.cell.output_area._hv_plot_id;
+  var server_id = handle.cell.output_area._bokeh_server_id;
+  if (((id === undefined) || !(id in PyViz.plot_index)) && (server_id !== undefined)) { return; }
+  var comm = window.PyViz.comm_manager.get_client_comm("hv-extension-comm", "hv-extension-comm", function () {});
+  if (server_id !== null) {
+    comm.send({event_type: 'server_delete', 'id': server_id});
+    return;
+  } else if (comm !== null) {
+    comm.send({event_type: 'delete', 'id': id});
+  }
+  delete PyViz.plot_index[id];
+  if ((window.Bokeh !== undefined) & (id in window.Bokeh.index)) {
+    var doc = window.Bokeh.index[id].model.document
+    doc.clear();
+    const i = window.Bokeh.documents.indexOf(doc);
+    if (i > -1) {
+      window.Bokeh.documents.splice(i, 1);
+    }
+  }
+}
+
+/**
+ * Handle kernel restart event
+ */
+function handle_kernel_cleanup(event, handle) {
+  delete PyViz.comms["hv-extension-comm"];
+  window.PyViz.plot_index = {}
+}
+
+/**
+ * Handle update_display_data messages
+ */
+function handle_update_output(event, handle) {
+  handle_clear_output(event, {cell: {output_area: handle.output_area}})
+  handle_add_output(event, handle)
+}
+
+function register_renderer(events, OutputArea) {
+  function append_mime(data, metadata, element) {
+    // create a DOM node to render to
+    var toinsert = this.create_output_subarea(
+    metadata,
+    CLASS_NAME,
+    EXEC_MIME_TYPE
+    );
+    this.keyboard_manager.register_events(toinsert);
+    // Render to node
+    var props = {data: data, metadata: metadata[EXEC_MIME_TYPE]};
+    render(props, toinsert[0]);
+    element.append(toinsert);
+    return toinsert
+  }
+
+  events.on('output_added.OutputArea', handle_add_output);
+  events.on('output_updated.OutputArea', handle_update_output);
+  events.on('clear_output.CodeCell', handle_clear_output);
+  events.on('delete.Cell', handle_clear_output);
+  events.on('kernel_ready.Kernel', handle_kernel_cleanup);
+
+  OutputArea.prototype.register_mime_type(EXEC_MIME_TYPE, append_mime, {
+    safe: true,
+    index: 0
+  });
+}
+
+if (window.Jupyter !== undefined) {
+  try {
+    var events = require('base/js/events');
+    var OutputArea = require('notebook/js/outputarea').OutputArea;
+    if (OutputArea.prototype.mime_types().indexOf(EXEC_MIME_TYPE) == -1) {
+      register_renderer(events, OutputArea);
+    }
+  } catch(err) {
+  }
+}
+
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Loading-our-data">Loading our data<a class="anchor-link" href="#Loading-our-data">¶</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this notebook we will primarily be working with xarray, but we will also load the same data using iris so that we can demonstrate that the two data backends are nearly equivalent.</p>
+<h4 id="XArray">XArray<a class="anchor-link" href="#XArray">¶</a></h4><p>As a first step we simply load the data using the <code>open_dataset</code> method xarray provides and have a look at the repr to get an overview what is in this dataset:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [2]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">xr_ensemble</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">'../data/ensemble.nc'</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="n">xr_ensemble</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[2]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<pre>&lt;xarray.Dataset&gt;
+Dimensions:                  (bnds: 2, latitude: 145, longitude: 192, time: 6)
+Coordinates:
+  * time                     (time) datetime64[ns] 2011-08-16T12:00:00 ... 2012-01-16T12:00:00
+  * latitude                 (latitude) float32 -90.0 -88.75 ... 88.75 90.0
+  * longitude                (longitude) float32 0.0 1.875 ... 356.25 358.125
+    forecast_period          (time) timedelta64[ns] 29 days 12:00:00 ... 182 days 12:00:00
+    forecast_reference_time  datetime64[ns] 2011-07-18
+Dimensions without coordinates: bnds
+Data variables:
+    surface_temperature      (time, latitude, longitude) float32 214.0061 ... 245.59375
+    latitude_longitude       int32 -2147483647
+    time_bnds                (time, bnds) datetime64[ns] 2011-08-01 ... 2012-02-01
+    forecast_period_bnds     (time, bnds) float64 336.0 1.08e+03 ... 4.752e+03
+Attributes:
+    source:       Data from Met Office Unified Model
+    um_version:   7.6
+    Conventions:  CF-1.5</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Iris">Iris<a class="anchor-link" href="#Iris">¶</a></h4><p>Similarly we can load the same dataset using Iris' <code>load_cube</code> function and get a similar overview using the <code>summary</code> method.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [3]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">iris</span><span class="o">.</span><span class="n">FUTURE</span><span class="o">.</span><span class="n">netcdf_promote</span><span class="o">=</span><span class="kc">True</span>
+<span class="n">iris_ensemble</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">load_cube</span><span class="p">(</span><span class="s1">'../data/ensemble.nc'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">iris_ensemble</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>surface_temperature / (K)           (time: 6; latitude: 145; longitude: 192)
+     Dimension coordinates:
+          time                           x            -               -
+          latitude                       -            x               -
+          longitude                      -            -               x
+     Auxiliary coordinates:
+          forecast_period                x            -               -
+     Scalar coordinates:
+          forecast_reference_time: 2011-07-18 00:00:00
+     Attributes:
+          Conventions: CF-1.5
+          STASH: m01s00i024
+          source: Data from Met Office Unified Model
+          um_version: 7.6
+     Cell methods:
+          mean: time (1 hour)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Describing the differences between these two libraries is well beyond the scope of this tutorial, but you can see from the summaries that the two libraries deal differently with both the bounds and with the actual data variables. Iris cubes support only a single data variable, while an xarray dataset can have any number of variables. In this case we are only interested in the <code>surface_temperature</code> dimension, indexed by <code>longitude</code>, <code>latitude</code> and <code>time</code>.</p>
+<p>We can easily express this interest by wrapping the data in a GeoViews <code>Dataset</code> Element and declaring the key dimensions (<code>kdims</code>) and value dimensions (<code>vdims</code>). Note that the Iris interface is much smarter in the way it extracts the dimensions, so usually you will not have to supply them explicitly.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [4]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">kdims</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'time'</span><span class="p">,</span> <span class="s1">'longitude'</span><span class="p">,</span> <span class="s1">'latitude'</span><span class="p">]</span>
+<span class="n">vdims</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'surface_temperature'</span><span class="p">]</span>
+
+<span class="n">xr_dataset</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">xr_ensemble</span><span class="p">,</span> <span class="n">kdims</span><span class="o">=</span><span class="n">kdims</span><span class="p">,</span> <span class="n">vdims</span><span class="o">=</span><span class="n">vdims</span><span class="p">)</span>
+<span class="n">iris_dataset</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">iris_ensemble</span><span class="p">,</span> <span class="n">kdims</span><span class="o">=</span><span class="n">kdims</span><span class="p">,</span> <span class="n">vdims</span><span class="o">=</span><span class="n">vdims</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we can compare the repr of the two Elements:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [5]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">xr_dataset</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">iris_dataset</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>:Dataset   [time,longitude,latitude]   (surface_temperature)
+:Dataset   [time,longitude,latitude]   (surface_temperature)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Despite appearing identical, there are some internal differences, such as in the data types. xarray uses NumPy datetime64 types for dates, while iris will use simple floats:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [6]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"XArray time type: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">xr_dataset</span><span class="o">.</span><span class="n">get_dimension_type</span><span class="p">(</span><span class="s1">'time'</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Iris time type: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">iris_dataset</span><span class="o">.</span><span class="n">get_dimension_type</span><span class="p">(</span><span class="s1">'time'</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>XArray time type: &lt;class 'numpy.datetime64'&gt;
+Iris time type: &lt;class 'numpy.float64'&gt;
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To improve the formatting of dates on the xarray dataset we can set the formatter for datetime64 types:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [7]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">hv</span><span class="o">.</span><span class="n">Dimension</span><span class="o">.</span><span class="n">type_formatters</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The other major differences in the way iris cubes are handled are in deducing various bits of metadata including the coordinate system, units, and formatters. Otherwise the two Dataset Elements will behave largely the same.</p>
+<p>For either data backend, the <code>Dataset</code> object is not yet visualizable, because we have not chosen which dimensions to map onto which axes of a plot.</p>
+<h1 id="A-Simple-example">A Simple example<a class="anchor-link" href="#A-Simple-example">¶</a></h1><p>To visualize the datasets, in a single line of code we can specify that we want to view it as a collection of Images indexed by longitude and latitude (a HoloViews <code>HoloMap</code> of <code>gv.Image</code> elements):</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [8]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">xr_dataset</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="p">[</span><span class="s1">'longitude'</span><span class="p">,</span> <span class="s1">'latitude'</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[8]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div class="hololayout row row-fluid">
+<div class="holoframe" id="display_area669d01a0e6d04240b92a6650dd4d114a">
+<div id="_anim_img669d01a0e6d04240b92a6650dd4d114a">
+</div>
+</div>
+<div class="holowidgets" id="widget_area669d01a0e6d04240b92a6650dd4d114a">
+<form class="holoform well" id="form669d01a0e6d04240b92a6650dd4d114a">
+<div class="form-group control-group holoformgroup" style="">
+<label for="textInput669d01a0e6d04240b92a6650dd4d114a_time">
+<strong>time:</strong>
+</label>
+<div class="holowell">
+<div class="hologroup">
+<input class="holotext form-control input-small" id="textInput669d01a0e6d04240b92a6650dd4d114a_time" readonly="" type="text" value=""/>
+</div>
+<div class="holoslider" id="_anim_widget669d01a0e6d04240b92a6650dd4d114a_time"></div>
+</div>
+</div>
+</form>
+</div>
+</div>
+<script type="application/javascript">/* Instantiate the MPLSelectionWidget class. */
+/* The IDs given should match those used in the template above. */
+var widget_ids = new Array(1);
+
+
+widget_ids[0] = "_anim_widget669d01a0e6d04240b92a6650dd4d114a_time";
+
+
+function create_widget() {
+  var frame_data = {};
+  var dim_vals = ['2011-08-16T12:00:00.000000000'];
+  var keyMap = {"('2011-08-16T12:00:00.000000000',)": 0, "('2011-09-16T00:00:00.000000000',)": 1, "('2011-10-16T12:00:00.000000000',)": 2, "('2011-11-16T00:00:00.000000000',)": 3, "('2011-12-16T12:00:00.000000000',)": 4, "('2012-01-16T12:00:00.000000000',)": 5};
+  var notFound = "<h2 style='vertical-align: middle>No frame at selected dimension value.<h2>";
+
+  var anim = new HoloViews.MPLSelectionWidget(frame_data, "669d01a0e6d04240b92a6650dd4d114a", widget_ids,
+  keyMap, dim_vals, notFound, true, "default",
+  true, "./", false, "140115470501256");
+
+  HoloViews.index['140115470501256'] = anim;
+}
+
+
+
+
+HoloViews.init_slider('669d01a0e6d04240b92a6650dd4d114a', '140115470501256', 'time', ['2011-08-16T12:00:00.000000000', '2011-09-16T00:00:00.000000000', '2011-10-16T12:00:00.000000000', '2011-11-16T00:00:00.000000000', '2011-12-16T12:00:00.000000000', '2012-01-16T12:00:00.000000000'], {}, ['2011-08-16T12:00:00.000000000', '2011-09-16T00:00:00.000000000', '2011-10-16T12:00:00.000000000', '2011-11-16T00:00:00.000000000', '2011-12-16T12:00:00.000000000', '2012-01-16T12:00:00.000000000'], false, 1, 0, 'None', 0, 50, 'https://code.jquery.com/ui/1.10.4/jquery-ui.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js')
+
+
+
+
+create_widget();
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can see that the <code>time</code> dimension was automatically mapped to a slider, because we did not map it onto one of the other available dimensions (x, y, or color, in this case). You can drag the slider to view the surface temperature at different times. The example would work just the same for the <code>iris_dataset</code>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now let us load a cube showing the pre-industrial air temperature:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [9]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">pre_industrial</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">'../data/pre-industrial.nc'</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+<span class="n">air_temperature</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">pre_industrial</span><span class="p">,</span> <span class="p">[</span><span class="s1">'longitude'</span><span class="p">,</span> <span class="s1">'latitude'</span><span class="p">],</span> <span class="s1">'air_temperature'</span><span class="p">)</span>
+<span class="n">air_temperature</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[9]:</div>
+<div class="output_text output_subarea output_execute_result">
+<pre>:Dataset   [longitude,latitude]   (air_temperature)</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that we have the <code>air_temperature</code> available over <code>longitude</code> and <code>latitude</code> but <em>not</em> the <code>time</code> dimensions. As a result, this cube is a single frame (at right below) when visualized as an <code>Image</code>:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [10]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">gv</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">air_temperature</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[10]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div id="140115538061520" style="display: table; margin: 0 auto;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWoAAAC0CAYAAAC9m2YIAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4xLjEsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy8QZhcZAAAgAElEQVR4nOy9abBtyVUe+K29zzl3eu/Vq1ejJqjSEKIRkxsHmCZM02IIBlnYEQLTWEKAGvyjMXLbBgnocDi6IcAObCxHEwxGgBxIiDksRBiEweqGcLgASQVCqAUIzTWopPdeVb337r3nnL2zf+xcO7/MvXIP5w511XVXxI2zb+6cd+aXK9dauVKcczinczqnczqns0vFU12Bczqnczqnc+qnc6A+p3M6p3M643QO1Od0Tud0TmeczoH6nM7pnM7pjNM5UJ/TOZ3TOZ1xOgfqczqnczqnM06zp7oCFj1DxD3yVFfinM7pnM5pOn3IOXffcWcqZ9GOWkTcf90+ufzrp6DJ9ekX+ZTTaW/XCjmlck6nmF46paaeWTp7qAU4B3zRIeCcO/bPcyY5amA6mJ4EEJ42uJ7FwZejMSMx139TgO4kQXFq3qcBjifR3rPMJJzmmD/OfjhtZu/MAnVKR+nkTdMe97c46Y/7VE3IqeDSx29MAcOjAn5fWUN5nxb3fhw0pZ+Oc4yOGY9TuvGoVdN+2HSePBU7caUzDdSbdOiUNJv0+3F9rKOC6ibpT2qcraYmSCrCQCJJuL5jYEzj5KgYEdcCXDNeTzltvU4BvDeVVI4dL1Z/TB1rOkemLuBD5eS6d2qXFCPKOms0CqhF5H8D8L+g6ZN3A/hWAM8A8GYAVwC8E8ArnHNLEbkA4E0ALgB4uXPuIRH5FgA/A+DznHN/6vP8MwAvcc598KiNOClw3hSUN16xJ8S1qrZJudfrkK5GGBBXCgqnwjSsmlB2DeDaQOV0UpcC7PjnSzTTS5r8bbDEQF6E4BBXjHQIoDoFlE+bizbHH9Vh7PeuAZQj41oLAffHqDIn9BO3cSywp3Wwihuaukflrk+bBoFaRJ4F4LsAfKZzbl9EfgnANwL4GgA/6px7s4j8BIBXAfhxAC8H8JMAPuzTvdZn9VEA3w/g74+t3NjOHLNCjsXc05CNj0nTV41c+kfr0GdrK0/KdOFH9xaALf9cAtjxzzsCrHz8m5THJ12oQ9/EWiXgrnW+TLMql16jPFkDM//PJf9bUV5wATxnCGCkaUoJA7yQ5n8uu0iA3qKh8XCaE712obwcZz0avHPtGlgI0m7qA/aTAvXcuOHyxoJ3mldfnXmMnFUZ9QzAjoisAOwCeBjAiwF8k3//BgD/Ag1Qlwhzk/vrrQC+RERe6Jx735RKntWtypQ6TV1I+uJfrYHHfYJnFsAT/nkXAYC14yuE9zV9jaUPWwK4zYc/fxZz10/6fx7zvzyot+h/FjG0wJkRVTC5ke8B4Ab9w/Hv9ZWYEyhv+bBSgG3/vFUCs3lIN98Fyh2gWPg8F4i2Ca5KfpfAer95rldA7fvE1UCVbC+OexJrnx5WwON+BS4Q2sk0lnOeypk7Y1dVu3hMpXmV2FxUk1KN4cV0CMDHgLeVh9U/pw3ag0DtnPuYiPwIGg55H8DbALwDwHXnnDJuHwXwLP/8RgC/AGAbwCsoqxrAvwLwfQBeObWiQyvf0Cqu/XpWLCuGRBfWx1ewqgDs+gY96cLzDN12PkFc2GXiIHnU3kWdq9z1u5cBty74Xx6cLErITQAGfas9FjfM4gqLeBzMqb5zCcDV7hZKYNubeS4uAeVtlM8eIDuAbFNmPIhSwXsF4C+bx+sPAftVKEPBSDn27a18/dvyqSEM+kxpn0kN7JXh3WIDExEV+TgX8h/6PvtVIyIDgP2a2inhG+v32+N2UXk5KkZOyF5mraeM2vWD7xgmYQi8T0MkNkb0cTuArwNwP4DrAH4ZwFcbUR0AOOeuZ94Djez6+0Xk/qFy08anAyknNxuSpwn6wXrKSjlmnnAdDg2uZJEpj0FOg+cKSgD2Ka4+79HEuUFchtZzDuC587juLJaYAXhCuWfiUNcZOaIFxI7DKC5z3yUBNJAo/BJZs9XHV8qQXsF5p2hAEwAWnkvevgOYXfH5XgJkN+Qhu2g6RCtB3DaeAOrrzWN1rfn95F+QvFuAiz7+3hXKk9lZfU6F+X0sb8LRV8v49Tzh5Ns+p45uwXdIZMOLNomQrDkzL4A7lTEgkdjaBRHbniHzHyOisJAyB8jadSmX3sukbaiBzNVBk522Lf0Y0ceXA/iAc+4xABCRXwPwPwC4LCIzz1U/G8BDQxk559Yi8q8BvGYobgoIpjY6s+XRTs6thH0LYLSSbrhSarJDF0D00IV5uCsEaNqGTFnMSfCA3KL4HyfRhMZRpm4fgSPeMcrYKoCrfratqL47VK42aE1t4AVvjcCA6mJUIUxihzDJ5lQ3VRpuS1iw5ugCeafO/v1CgF0faWcOzH2GW3c1v+WdgFz09d2lArWgGeIVRGkBFJd98NXm98IjjcgDAIo5UPrFYHabF5sgNFIoL5dy5hZQs5jFP9dLylffL4CawLymvFVEo0BeVTaAhwRBbFFKAL/CiDsjBuAS1f9WBdyk7w00339vAMWGdo6Dos6M2CYH5EN5mHREHcBx0xig/jCAvyUiu2jm/ZcB+GMA/wXAy9BYfrwSwH8cWebPAfgeABf7InE/lsgoAnJcwBHkG5t+iBwnrx3sJAZcHdhe7IktZ3MjloKkSN5r+BMuAKa+3yUQvFh0Qd+5hhvVzFru2hjIAqBSbgqBs9pHmHDaXmYkmbuu0F2cxMXy5W1SboLSAcAds1D3nRLY9eC7uJ24Zw+ycpG46B0ACnxA1wwkBRf93+e19zcbObWSyT0zV660itN1qEYA4iXgDkLxqZwcFVBQXjc917+msbN3IbxXe/XaAUUdnpWiMdSj5GXg5PE4Jwsdfn/TmEQsmorEHRtyvFZd2zpwWzbEghy2tH121pSJzrkHRORX0JjgrQG8C8BPAfhNAG8WkR/wYa8fU6A34ft3AF7XW7EB0QfQlY8BzfftiE3oOfqwA6ZIU6iQMEBZxKF12aLy2FyKQfaCsX3k/y25WomAP2t0P6hzwKF/Xjqg1K0zZaJAvl3GZmv6DZ6sQrtW1AZVSM4JaHXhmSPEXSLMu5LqqO1ZISwwa+L05hL6TLnonTLIZnduA7bu9fW9g7hnZtn1mblnbWABk8OVAnAKur6y8mxADrtxI8rIhWRFYdr/Cr6rAM6oAGGw93HE/x48Cix93Ej0QX1WDRi1W6K9lINdKleemXM1LdYWWRxzmQHkrAiTFhmLtGy2LrJ2jKmys81/g4UAIEbnFOTSTGfW18ef7sZhVjXr3PNA3JQ27QGWoTJQ6xxkcyqWNXN9tK43SN53SYKlhrWS1ogHpaabUxls9dGKMwR4lgcmNmVjG+aCwnVyKTDOC+ATnqO7WYe4+w645cvQrfA+iUnWiL+fLgYKBLsSzO8uFaFt21QH5fovbwM7nnNe3AcUXsyBPQRQ1pWLuWYDlGWIq2ZakxgjHUwWu8lh+oFYHtSuTIC71Ty6A8D5lc6t0Hbg2otf9q8CK59+m3zh1FSupaQEgmWKikPWtHtixeLaxeHahEjxmLxnys1J1k3wJ5kXIa+ls9MB9g4PaNLoONIxkgP34xBbDOXxObeeZr4+FklT+5QdQDKQkrTpgMrNszSvIUqtIJQ0mIEvRzpvZwI8zjJF/7trlLGiMm64fkXODGGC3HDAw37C3uNBq3IE2pSuBg0OqtedHgSrwzCxtoRAWb+DxNx3u3ihy83sSAzOreiDtst3+C394hKweJ5v490IAvgFVVh/CZg7oAz/P8uT0PM8J06dV13mklm+A3qvH3mNLgdfI4hMluG9VEB1o3le3Qxt2CWBoZZXGruCNXH/NSkLV5mxzRY4qW4iNcNz9I25DG0ONy0qwyh3ZYz5ihaL1g6e6pjOTx3fSwrnOT835semZOVxJqw+nipikMsBIpPFUVsrf188fXZW3Ez5zDjNkoGUE7kUtKUvaQGqKZKC2S0XTujpa7bCmCFWLKZUIODAjgQzq6tVqMuVVmAd2iDcDp6wCs5FYGBv1o0Nd1TJmrggBxxSvi0H73/3JLRxpyC8lZBH4Rsxf6YHaKABaeWeF92MI3BmUEYSrr+WYpGJP7Y+r0N8oUHirI8/pgxPnH7muWcpghITQKRYbMNWIW5bPOVV0o5Ky+DvKtJdSKVI5pDBaVsKvnTe8c5NqdV5kPiskG4eK4doS2rJ1C0mrkYQRbaK9hGIPRTFMjs8SeHEmQXqWQLU1pFfBvBD3Sa6LtcQKVCMDr5ehfBUZqac3qHxEQqE1RoIgJkTd0RpjR2Clv1EDdzp/3m8DoCoVNJA3hnBtSvNJHDSKxq8erDlSkkLkkOv6VSRPG8ncaUADmhCF/SsAH3RV/xSEbatC+KitwpgSwHa20AXdyNosBYIQD0ncGK7Pwsk+f+xoo+l/wMaufKT/vlxdBFihrA6sgKzRiTyaMMYcFUuXQCF3y2o9Ue5JOuO/ZCkXoVwVXKWc5KDU7uY+bYO7dQuFp+0cQ2gZs5XiRWboHFaIuySWyWyEHfuAgPCsnHtJjbbZP2I/s/NLBCYiznsOnLaisZmSjxEhOeaMbFPkrE+s0C9XwXjfmHOSrfFZZiYy2WQdZXoaqJTSjn1KwiDb1WHQXCjCs8K2Kk4w+L6WdniMoPAErcopzEXOrQhXY65b3upxONI0y9pEmlYRZEfXod+vqfMD1wAuGMHePRWCNOFlN2I6wTYQrz9vOAzudN/370SuODBaEEZ7DwHLbKUdzS/chkxUHtAFJbb8OkZFodYHy43u7QDVdH3JODeT68JXCUVPRwm71nfwjIgzaemfHzb3A0j/wXaxaLYCUrGckEATpYihWWFQvVvN1Kk8EwP3QANiK8zHMc8AfUSQKVycNqhRaJBFbMQkDMnv6zD2JlJnEbLmBn1aXe0sD917v+a6phyys7Z3HOfKOYk6MwC9U4ZQLKogJlq3xWQZ2EAF6Tpnkl8VDgl1pa3KzttVYs12sl0edYdoOmHUyCOBpIORJLtpR8znQ/MVF0sQrmXiy6nHtWHnoX+1/Q7NCq3hLgWHzZD6IctFw7KXK8D983EfaaTNFJaGXH5BOGVErjN57vrwXnvDmDrM6hNyh0uEvM6oEF9ElwKy6NTjnqGwNEydw10ZysTcbnucR/2IUpTE3jysUqlirj7Gq3ZDYNyVI85pdPnSyRKYTM9D9SOzP7qZVhvhE0BldEp44WD89R8tb6u7tpkc9yqtnelM6NvO4fUaOzo/y2DtEa0aDKYU5ZNvhSwqsnsj+aaBdrMyetiwp/DUlim839m1LHKcUvHSMchXz+nczqnczqnE6Qzy1FvFbEJGh/fBYByOyhOyrI5NKHPSnPPjbnK2J7C4DIAlKvmD4id7VgKwpxZU5uX5DXOrRzbkPfN6ZnldZY8OxWD1AmHPxc77sIIm0tj5abhKru+W8UPBTD3I2brIjBTOWkRtPdqbFAhMJr3lsAln+7uu5vTfABQXPK/dyA6LNJu2XeoocopFuFZ9hCOTVncMhttp/LolFhBWAPwR8fb3zkCZ1kgKA4Mu2es0R0M8KIKLkPzUjEIPQvnp3EPEDq1DNy3kOhDdx483qNxbox5VzW7VqDh0vXoOotD2vFCXDBz1rqLTc0DWZTS7obnoVyh92p6uFMGXyrtQSraZdYuVtwd+jyYs9a4iyIjuqB52XfsfiaZ9JTHbLQnrM1prD/qywB+GsBnodldfxuA9wH4RQD3AfgggG9wzl0TkQLN6cPnA/h259x7RORL0ZxkfKlz7jd8nm8F8CPOubdbZW5vhY/Og04n8ewCsPZyvLKiAyRl0JIXNGg1D1d1FS+8NXQVMPcAtFb5JMIgkzIsENUqgHlVxaZGTRvt7ZTlrpKVKTUrWWhiDAF1RaIWFXmw3G1lbFtZmQKEhYWPAmsbFgWw7UF28RzgOV5ccfW/Ap/wCM1KSlUWPnMXuPLFzbPcTpVmhZs+8151l56f8L9PIoDzHDFQW2IFoWeLWNultE/KQiVWCrKPEC7XyospNdvTXwXnzHHOdrwiiDsixmMJFATgSm3cDFA7Krcd/2VQXmpYsR/GPIN+MUd0rD6lXJe3dZ+HBYLFl1XVgDUQxuay7ioNgVjJaDE1axfGtGWVwXL0SFlI+SulZpBnUUb9OgC/5Zx7mYgs0Eyh7wPwu865HxaR16LxO/0aAF8J4AEA3w3gh9CAOhD8Uf/GmAJ37gZKPg6rsjn9sDvh/frx+JiuhltchdBAFOZOiKNoZd87mfQE+rpYuCrYrip4FwLMtrp5VOtYy66/7KvAMoGyzJ6AwEksidNg7kKBescAkMMq/l/LuHNGHIOfhFsXgbmeBLzdgy6AC/cC1z/cPLMVzGU/um7/AqB1wzVDxxGSLBAazyfrLiIA5CUKV4UjOUQygVrDLUpnfY12MXCfQMzBp/VOZ43FJafv0nSchjlnQ1PcAm2JSJ7dvt+G2c7WMyABMecvRj35GLvOqXInZmQspsckfsc27ZSe4xbKIB0Ca10A/HieF/E80HG+T3mozoTBFxTXYnjmRTjQJYUtf5fMGOKdQV+846Ax3vMuAfgSAN8CAM65JYCliHwdgC/10d4A4O1ogDrnj/pPAMxF5Cucc78zWLHbESZperQWvhTdklcxpyE76FDLWO2FsGig6MQs0Z6Drpdo/RXrb6PWDulntCi020NaNDQdhwGhvsy1VyRyyZ0gAxAdYCiFlIHoUiFhAB2uu0qUi2TWFl13VYSBOPd9NruC4EdjF22Dt78IuPOTvg7adwCuqGjjM0Jc2UN8wkZ/GRDFCN81wlIWSPO1th5puDpLVs75JuDUrRjZRkd22pyPJfKwzHGGTHRYJBNtj4x0JSlPRyiw2CGUpPEzACvbaOVfmt4tQ/zIyVQOpC3PgQO7DFcFxmi2Hw758Bxlh1MsJrEUfmyN0jqcojmjQD6fAYsL3bKGqFzEO/amAIxwTbcZjeGonwvgMQA/KyKfi8YX9asB3OOcexgAnHMPi4geQ/htAD8P4JsBfEeS1w/4v0GglguwB7BSET86Pb21Z8ijyZhSdumZ81du9+MBVJmjF5qoLbAR6EdVS/P3YZFXNR+n9Bx5vQRmvtxqGd7PVuFZufB1HWvZrZWcNewqQnJ1bL4LNBz1bnqCD00aFSFpPxSX0PrTwA4CWO0Bl1/aPF5WEch7gNmz/fsZwqk+vnGAgdoC5yIJB5KTUN1294anVKFdlN1DCJ1C3HO76PP5/HQhSEC5Y+KW45jTvHLPrTGxkV7jGnPF8huSTU/Ucog6jg8obII3QM4L6NcTybIRuwDNXFMQbBmcKsjOiwOy0nKNjxoAmPv2shVSTkY+90zE/M4QZ/UIIvNGoAFk3oEzw1benjTmBA2pxwD1DMB/D+AfeQdNr0O4XqtD3u3pN2be/b6IQET+9lChwr71BlZuWSBowYYE+yUgHkDapWWBdrAWNTDzXsnwUbR+iSPSwZoxA2xNpXIKnTpsZ3V7WlZhy1nuoz3QUNAhB1Vy4jCWl0ULQgJSQvbmszo4ZWqrQmKWsmxs0oEG6MvtOC7miM3lWE57RxL1TvqHD4AUQEeEIElezKG0ikHphqWArB0/RmZYA5Hx7h7CYZM50DmwwuWyNyI2K+MTke02KDw7TpcDzj4OnPMdsxhp3JxsPFOuJHVzBQF06oEw5Z5XiOZF+0nId4mSSzluVqTqIR929bof0ml9SgDbHiv0UJTLLBRtnUoSj14KebHLWp2X0e688jtCwN7JPcVA/VEAH3XOPeD//xU0QP2oiDzDc9PPAPDxkWX+IBpZdc75FoCmA1tK5XgppXv+dDBvISidFmgOTQBhO802uEWQveLTgUK3Ml777x6juOxNrUAHuIXylZoGjbUlrQBHg0RPpZX7ZNeqYgVaPMq0TAOoVdFk2dO6Oha56AKw2AaqgziusD+NBHCFgRiIfT+X6E5wwOai2VIDsD35pOnTfA2Q7JCCnp94UgDwB3iQtjMtixZ2sEjL4nxJACgIYM1+Q6xDJtHlkNyusXJ4jhs58KD3FhmgLnPkr5onMAcQiQajeUviSRWfpGO1fU/MCTM7rPxn7rllZBQzmFkjnVIUTsYBLXe+53fyAAplNPjmn5RyjMIJ0Bg3p4+IyEforsMvA/Dn/u+VAH4YE/xRO+feJiL/J4Bn9ka8iH6ZX5W8tzpTwWKPVkaehBbnxvnMAPk0/3xHCIP3ZuaoPrKFmGvUuKQkE24Dm3LBcwmqXKMjwdijgegH8uxK8Ki23iflpzGoeXBGmw2Ws6ecs0+/3o/D3NKQdabEwGaBa3QLLf1aoC2GmKPPkiP9/xDBrR/f4gsEcQGLNvj7pe1MFYFrI5zLX9vhne0/mZbmxnMkF84BdRrOcnZLNJL2VZ8ilBfldBFS0NW6AmFsHRD43uwyHAAihT1fmpD68OZ+Y38nc9616lxcxOO/ZSJ4vrPyVOvDB6yUc2ZR3RA9xRw1APwjAG/0Fh9/DeBb0VT/l0TkVWguF/j6CeX+IIaAnbaiAOyBOKCoieSp+nHTo8QWMdjox1Vfx88FnP+Ycg0xR5Ve68SLQlrfxN2l0KBHHQCRt3m8SBWe6589AdQk51Zi7iMN03z1N7c9nCVg7w5ANx0g9CnvSJRScLaeLVDP5ZFbAKJKJ+G8NbfyjhK5+BSj9gnvWBi4GKgtzpeVfvqedxVpnvrM30K5Pq3hCvmxy9Ygab0sYvBmOkRXnMEOMyrY/a/j7RBwehJzP1ZIWlyykrBxAHHl1X4SB7ES3y1jXVKnPrwAU1i7+B0EJk62A0cduSmw+ukUbKeZRgG1c+5BAH/TePVlI9O/HY1ViP7/FgysP2INaiBazTvXHAHNCpr6JWbTqj6OzKI0zgVA/F7ALRHELszBMKfYXl0Stnpuha5Wj4F8FZ6lTsI1jXLZF4FSzalI6eNYa67mgnuIbGfT9xHRllE5EneA1ney8FFubif3LU/onKMkJYubtMCkT/SR5rUi5ybpqYV0cagFKK0TD0Zd+FtzPbIeuDLhSiwyyfVJ+v+QRUWRPKc70rSs3EKZlpfuFGZGeJX8+jpGllNIRB+LeM4rR10kFijtewVyYjSEy2VRjO5UFbDnCNYzbOa4i/ZGHzUBlVT0MZa7PmY6sycTO4q6dOsGAmR+n27TgLiVFveWgooFNhxXOep70djcar2siaUDmDlbEpM4VtIwaCt3fIiwujPHzc7ofT/IReJglPvYJ3AmxUm7tUwmQDt5FqRQoQMKsLbhFsimfZrjgoEG4BhHNb8c19J+nwR89bSN6g5KifPg6Ape/N7gZiMAYq7SAnCu9xg5uabJmdzp/4mPDKDHlMyyRwfsuZB7z/6zgaY/VYRxAxGnLckFH1w3uYTWqZUUCCaarKAFhZHoqf1Uyp3fJBEFnXuoSYfT9skBKf3mBNB82w8zQhp+G9VRwwy59lNBZxeo05rlZGr6zgICi/MaE9cCGCYdaFdIRHEd3YnGgAvECrY+e1jebvEzcy/GwQcg1Kflgm+Fd819YP69cuHJhI8mkXIiLFMe4shy4Jx+g6jQ5P+xEyKNp/Xkfs4pwbR+DEpTJqJyzyW6nHQqzmCOOY2TcruWrJiv8FEQzCjQW8UkH3nXehJJQcCX7haYSfBh7Tg6AGq/W0OF5vg/CLALtLb2jpXR2wZAJyAYKaQtBSCTmuTtIBZzAKivJbtBBmig6/tUQX1hAPSYnccp0NkF6qkdZG1Fh/Ky0nQAJue+Cw0g3Oln6ZPobOlcrs4MgjxJNV3C6bFnMwDNBGLRiTXpVe7GSlmWgysXni4U3PZUOTpHmLypOMmivgUxpUg0ZZji8cTl2w2Y5kmAAwbvZdLXBWBfY0LxNa4AveIzBhfmmDm/3P9KvHDwYsK7LkPs0EphaAxlT8wZ/lNw0zMdQAz0uhM7CHHrm2EHVz7Hl0ULiGwTgPMOOXelGY+ztM6rsMPr6ERSMGfuPBE/tuVo+t3wXrYoL2tsW7vrU6KzC9Q5bTqTJaPMdewQOHO8lrvOHK7gZ38PltzlgnmXJmf7YdAzH/nVdrIiEIiBJMWlWVDYdIwcLWsFBpuUk6+TuMxJIHlOFSsZzqj9HdqlmOZ5EuebljGTPJeViiCAcKOBg3GjRJK2FW2wV6ye+Lnyc+PVEo9Z6TUubeUBxGKJ9DlpuzhEY6MVsSl487ig3aB7HFh/1MfRxZ5FLnVikaF1VBHFYdCPyBUas/zdU7NWILauMM4nyI4dHh1pV8U8yaUbax//bJ2EpXMGHSde/Nv3fAp0doE63S5z+FBY3/85ZVYOnMd+kDukcXsHhMHLAzoFxLQO24i5pT7575K47CWCJYZl0ZJuwy3lT05ckZoxApHBf3tsn83rOM8hMQifNuSyIsWjhHBNM2QGVRrPFWIxiI4DVpLpNT77sDkqzpdN6vR5buwEmFIxB//qe/4+6TXgqeWQxczo+yVCP1mccboAkXxdvRq2Io5EyacijMgdAymvWxHHraAriZgWtcZaIrYc6uNiGaQPQ32lQqsAFHLdGFlvsFGBL0t4PPLYSuflGKA+BdA+u0Cdck1TwTj3zppEOXDuk6sq6QDfQpB1HVIYT0gFVN62clmGnadZFm1VhQ+TWDJOyic6WGEdIJrH3FMHqJM6iWWex1xLaTxHC4CE93MKszjxNv0IY1WOoljn6AodAK0LQ11Mb7mY09OFjNuofncrF9IxlvZwhC2l4iTAFl0BQRRTkhhGuUM21ePvzulpMWl1FpZCtAg7NNkFCl9GweIOXeQuhXIjBaAnqUhEwVwyP3N7NT25dojakPpY0XQ6l25rlPoAWo+Hso/YvE5FGywOyYk6NwHqE7SfVjq7QD21g/pWuCiN2O9zIhELtJUc4sHX3qVl+FtkufIhAqhrvsztsazMotTqwDodx0olqwkM1BbA8GIyNEpmxjO7Ao1EGNJdAOYI3GjHQieR++QWMX2Xo1Ji7z2FNJc6qjiEFbQ1ujbPvJjMhL6b607qLYnHhXLGpdgyc75wki8DbIFU+8YFgApSDN8AACAASURBVOIFr0a8yOh77aeD0B7h8UHg3dZgjs7NMsJ2yqmozQI09tVtgaDmP6N6safKdaY9XLaeKL0bwQpLxTd86fEW4luA0rpY4Jy2yxpXY5i4Y6SzC9TphFUaBeAJqg5y1Jm8GChy1HpRR6gzb6dXFMYDTcGVuQQd4DuIFWOpYosHsmVSxnHrJDx131mguzVM4+aus7IsFBioGZyZ42buWePOCZBzIimg6Que8H2ThMdB5eK4ypHOCQT1mfPNiU7axY3aRna6cZ/4fxyCvJnl5WxBwnVAIkqbSRDP8E6KRSLWboLHvKZZ0vtdhAWAT6MqeDLny7JxVk4z55zjglOxW0EAzUpIyi/aAVAbWjcQZFLXpr8L8WJgKQhz4DwWGzAQdsw0GqhFpATwxwA+5px7iYjcD+DNaLwCvxPAK5xzSxG5AOBNAC4AeLlz7iER+RYAPwPg85xzf+rz+zMAL3HOfdAsMNXsWuIK690U7tvkopN8+3DaUUJ2KK10iMjEKSqLZYlaFgNQ9GV48vqCNW56lF7JAmoL2FKuh0knkaX0i+pDZIFzgdhqY04ADf9/6tMjSxLJUyOqEmBjuUTtEsWgA3almeiAvxXB1+Gq0bCVC6BEB5IiILigoJ+0na1YtM16F+Mt8oq1LQF0Vr6tAFrHUWs0dda8WmUijQe2r7cUjzre9sk8DwBup19LQZ3aF8OLS9IdHF84TCKVaLfGcmvNb5vy2kfH/0lkZse+e9gUU9u2B3uBiL5JEjb2+RTEHBZN4ahfDeC9CC7c/yWAH3XOvVlEfgLAqwD8OICXA/hJNMfKvwvB095H0Thj+vujSkuv3h5ayfq2Itl4BjiMWUH7gJHTpIof3qqqhQhzPTMKYyBIB1Uhcd6thQgB05CnNgWEOQJILtC/oPEOozY4Qo0Diqfp9V/mnpmjzu1cUlFBn2c8fXfgH1YI4J3ujrakuYJmQWNA++diEYsggAYglQu+7uLForXm0V2BIV7TMtRRst7YcI1k4zWAS9wnmpD6nBfPdldmLF6siLwJOO8bpuXoLfEOPBDzfWxInmlhEpY7W5YcQmIHzoN3KyrPZiAvaBju0S+Px3bnJmHc60US++gH6j4dlhU2xDxEO/iTue5lFNMuIs8G8LVoruOCiAiAF6PxpAc0Fwf8Xf+s57JqxF3yVgAvEpEXHr3a53RO53ROTx8ay1H/WwDfg7DhuAPAde97Gmi45Wf55zcC+AU0a+UrKI8awL9Cc4XXKwdLTFbYDlmypPZdDzc+JO/uy6fNw6+azPk6hDo7n24nkYtax36VK9pFLOPkZz3gsTa4WNb4VxmxAHNXysW2BxEkdr6TkxUj/T/XN0Y4c/os5shZcjAX3cqm6V1OuZNaSbBM2SF2h3uxALaLuCzt5wvEPev7OYUd1OGZD+C0+QC44T9EdDJVgNt83MfpuDuLsZS2hOpPykg+dKOzd+VikYf+qv/mxxEu6W3bj3DoqeiKGtq2KfEuMfXVnSPepbCoRrno9GCK1p2tpVQ0dYfEB2VYL1Dpd/NhOwjfJ3cWYiydgvx5DA0CtYi8BMDHnXPv8JfUAnkbCDjnrgP46kx2bwLw/V6+3U+p6EMpN0n74gyJPjrhPfWqKV2dAGCqtGBb2PSwQ3qcNjKTk9B+niypm06g60uCy9NfPsmnJmYXdYud9IElK7YWLL4PjCk7Muj9UP9qHSKrGpp4LgnTOs4IVDWDJbX9IhW8V8RlpaQiEUfptb17LogwtgjAb/pOf9wF8QsD9RMOeMijkcqHlwjABQTxyVwQo3LSZvaPUkpQMiodAvDXo+EhBJEJ+XlvTTF3EF/xlSqqCzrksg9AD7RcQnccM7HYAYjFGFYarSOP+SvK9Eh8ToF1ITrmVX6/jQDeTJEo52REFCdFYzjqLwbwUhH5GjRdcAkNh31ZRGaeq342RtwW5pxbi8i/RnO3Yj9ZFwCmZM2xHPi27zPPFifIxFyhJY8GwiRTzpc5s33ENrnKHWixK8QcILtm7LM8qV0MhMpVrui9pp8jgNWu/11wf52QpsS6/jkl3glYfV0Q+LZxk/rq/1v0v3LXBWLOV6RbVh8xZ3axIAuEAu21Oap34JONOeVrn611W/dkh3CYLI6WPwwXFgi9A3L950B5n68O+1XnOqjs2hEos+xc634TwYf6ASCaH1uIsEyYmRcFaJ0nBeIzB3SZQgu+GneBMD7Z9JPrxjoCZljSg0NsBDCGcuagJp3MAjAI1M657wXwvQDgOep/5pz7ByLyywBehsby45UYeXEAgJ9DLEbJ1GwCR50Lz1mGDOXF1H4kAgolRwOCe1In2LYLlgCdbaTxQZk7aW2MM4opC6xqhEWipPetsqsIAL1XdtMDw5zGRuNQ7Hx5Amh9nUPkc6NwcdyC+iNXVxattEeJi8yuydilDNFukeyOfGa6TXdV+JYOsf1uuhjecoD3J441wkUH4sKiekCFteagYvdfuxsJSsrDR4CZL2NLfXLsIYhGmIt+HM0tRghOlYoriD04kpjFsZ8MoGHlWJyhtIMApNFu2YUw3VksHbBK5k16EErzvkFmlZHYTne9sFFuCvhOAuqToaPYUb8GwJtF5AcAvAvA68ck8iZ8/w7A63oj5kQfFuUANyfm6Iubzn2WRwMNiDB49Ilitogr2iUuK5JV63YdkZF+O+j4MATLpS2fHJEJIMk15zRBtpSTznRaXzdNBelUNNTJw+CcJenf1rQtAWygR4egZQLRddRsyXFQd3dGJU14tttOqRQaL/R+z5e1U8S272w2qOmUEVk54LofEJ90QXZdkxycP5UWl/oj2fcvbpDIxd8Juv08YP1o83z4n5rfxQsQrrtbA9UjzeP+XwA3nvBV9OVe/kyg9BooPvziDgFRM0NdpC4gtqVvxx6C2I3nGpsbMtMgNC+ALsOiYiaH1t9OtDuMFvNknEwexxPjnwCJG7v1O0USEeceGNobIg8qfZzy2AMsQPOBUnmoA3EUjkzfHDre2xioKxenezzZLgOBa9mVZrIDDVCnu4va2YNn7bo2sDOE9LsFsOdnUXqcOqUpw2IKF54z60v7HfDcdZpXpu2cH3OdnH9qRw3EMnmNv1X072Jy4gzWBXDZN/1HOXDxTklJ5cuPVAFod0EyV2OxqVwQb91wwKMK1D7sAoIo4XHA/VnzeM0D9WoNbHsOdnE7sNZ0QHSTCgCUC2Bxn2/6HQjH0VfhGZ/m096JANq7QrbPtLNjoGY5uwL8LRdzx0AD8tpPFcLit1OEfmLmo6L5qjRGLr0JKFO28oUrOOcGQGY6nd2TiQvpB4sxXTFFY8uihLZcljXqVsqFfF2SDsnzjECWJ+aaQYNGhnIc2zSoLW9xM2oYAxeLTNiiQsUcW0W4ZK6iclNAA6YZ9pcD3ypV+vWFc/+muxcg5rg5nMtniwwVBaULmNqP58ZIKhJysEUuEWizWIKelTuviItvgUgCJ34PgIJWE/aFAsQLwAox15leBHEBwHPVabNAbms64NJHmqBH3gmsPJNwZQ/Y/rRQbOpW1y2DGMQ9iSC0LAKYC502DCIOaidbx7ACnS0yFjRX2gM0xOiwDmK7DO/bxZbGEIuAlOqBQT3EtD6FnPXZBWoGtqEOOqoJDYsS+GOJoEUABuw2TvI+rUdlyM+AZsAqgOjgqRAGcqRIQpjozP2x7Fzrw+DSmi8VwI5v3IwQP6c4PHJfGoN9CJw5PAI5hP6xxCHRJDQW1VSpl1q4pDsgJT5uXlLfcx3XVMdBZa+POxM6gEP5qjhqTovy9ZoUYjSGWtM4yqt0wH2+odd82L0FcJvP7PZ5m+/ssQZR734CeOJDPvkFoFSlYHo/IhrOufbiELdEuPKqCBx1ez/pZYRDO9o/QPeksb7jxYhFT2Uy5g/rYFK6KEKfW1Y7kU+VCUzEFH3FKUsizjBQk41rn4Mii/rsci0SxODbTm7emxFQlBTGQGJdMqDZMvhWLmxnlftbwXZiJBIP4LaN3D5qR+pUf1EA2yRGakU4OXAZAJ0hsjgZTmuBs0PMDVnmjyyrtiYR24MrsfP9FJSV6+KJvlYW0gURg5a7W8YLQDRekrayXPygiszcOmNzRnWYCXBZv9UKeMwnVHnsXhG29yyPndehfbf5uBeKsADMCuBurwD5oqaui1WF2/+bL+mhAMSyh9aVrTr9d9fRujSVi4DocfNDAN5zXXsE/a4iyIxZJ8B9bYHcTEIbFgW5jDXAe4wHxdIYQyZNAXKi45du9NLZBep0Eh2FctmwiIP9abTcG2+zGZypjqC4StZ2uAYdVyZuaEEDirkIPmY9SwYoxwXChAS6pki7CzTXOqNRULWHJ4q4fmOoIw7oSZuCqSk2oPY4CotAvUf0wd9HJCigmYPlXcjKKJu/lYqUIiD2dMiiIpA4w3UBpHLxmGsPLKGrhFw7svaRsPsBgi32k3XIV+u7RYwMiiDKUpHAXhlEXs4BC//8ab6w/2mJ8q5mIZDfB9Yf8FndROuPWt3Yyi4gepyNfFBjB8E5kioZ92jsso4n8hND75laxSMtSH1K3TE0hCFZIB5If8p22GcXqHPmeVP6J1UYpen5fSSXZu4t2Xqn4g7NW4yKFRKv/rxd02A1vVo6AlkJoDGjrXFJqGJxoCJkbaBgtQAKdc5ALuA03tC2vZd6uJZ0seLdRioHZ3BOd6JsPw0YliA06XWityctk8WeLWh0ceCFrdU9uCCoZXlqK2IqQn2Yi7e6cm8GrAhol/6ZAYjHoX7jS1sh3XYV3rcAhgREfLiOlQvzUMZyHdqx5zn255XAbY1gu7h3hcX/29TBfQRwyl2rIvBuoD2itofmRhigcSylliOa/8roz7ZtGm6Mm+2C5M5FLKYD4n7iPI5K6W69b8zzYjGkjD9mOrtAzaBkUS83NxKgecAwaDCXzNwbEINDBDqZgdPmS8+zMsTXSXjgbNCYCbDwn2mekQEV1Fd1HYeVdHKoAPLXV1NapSkcdCcvrh/ifhrirq2JHOVllDenRZFNAXXBrxywlQz3ddWIJoDYr3S04Ol3KuLvM2cERyhPy9dy96j/bx4GoGZO3+rW2QK4x7O0N73Wr2PF4vNaOzoYomA3C+9LMhdsx90ceKbvj9tXwP0NaMujFUS9B6qC8pIA96iQG8G74KN17BwJ8AdnfFlbEi/QqW/xOXHfF2eBOZmXYf5rG9JTpMcF1CmNBe4ItE+mKkxnF6jn5fjVjSmr8c2Agv6fBYWEo+7YURtbaCbeFrfbwCIMyh0F6jo+2cbmRS0AeW6o6BkZqunROAU7ZKDn2gDsspwG5EpDlg9jwNn6nB0xSJKeJ+92SX6frcWz7u5unAvHktnZhWXVwd+kkMDt8nNJQKRAs30FmD+veZ6/Gyg8u6ppaN1vyqB6zL2G7oqXOxQ7QO1Pqaw/ASy9TV1V2+NX61BIkL9zG/X9bReAC36ndc8KuLWO6ygEqA7AzL8vEUzm+BoyVqAzA5QeylmQHH1rFhiRct4dh2zpM3SCthhg8nJkje++06unKP44u0BdFvHHUWJtbicMtpKNw8dwcYPKrFQc0tcO4vL0eV0De97YdOGNp5dXG+NWoNlOq0iEFVPKHTP4SuIZR8//1ks7jk4W8e9darem8mwDsNPxX9NETkUpuX7kE3XWBOgTg7T50xjYNU5YthYVSYVTLqyqAxitiaMuEBRh25S/o7hsoVPTs/623OMinBLZuh+49IHm+cknQx0sBWu1IjcCd/nfZwHVx5pndwDMFTCrAGw6hhisygVQ+u9dVaEcXRSqw1CH3S3gol8gKp/mcNWIT4Cm6y+qiacLcnTejUT+ShDet0pxZVJKYIfG5oJO01SHcb5MkjAqfYzLFOJsrPEPxAtIe0XdydvtjXHK9BwA/wGNfrcG8FPOudeJyBUAvwjgPgAfBPANzrlrIlKgOSb+fADf7px7jz96/l8AvNQ59xs+37cC+BHn3NvNgq3tPJDnXNu4sEGjTZ8BArMOLAbxYZEd78DKzpxIydtACQNxy3NLd+wDB97bzdWKBgFxPgrQDLyy3XBaY6jeR7jQznN2WMSgrhQteGosSyPZVeEb1XVX6ZPuUvqUQn3fJMdJA7EMekZWGe0OpAxjZ1bEnNjKt6kioKkInNmSBmhEFq2ugOSltYsXUyDeDVY3yCb+hUDl3djtEggqpaCttP5IeFbQL28PizJuUZ9ovDIWe7WfTi/brKkP6rif9Tvr76xCe0tt7cJR74sO2KJ+AGI5OgM1L14qntnmcVw2doIAomvOmZGQDFwVCzv8KCTGnEjr08bt2YUeE43hqNcA/qlz7p0ichHAO0TkdwB8C4Dfdc79sIi8Fs0FAa8B8JUAHgDw3QB+CMC3+Xz04oDfGFUzBoUINFgmOBIUhrg4IK/YSpVZUeSE0kkW2UNLANyyCFyAniS4+JnApXc1z0/WdIWXC4DYquETcNbJG53vvdENwyP0/iA8R/1LV4vroGSOhUFbuYuiOF6uImcNomGsGGOuWZ+VM3NrYOFtzFZPxmWkVhLLOtmS+/D9dSi3TZvoNFp/L8pFC7Dtp1axAAo9qncZmHlnG7ce7rabZclA/L0BoHqMFvD98K3qCh1RwfxiSO+WYfzzgajSp1knoFQlCmeRoCdxDu2hnNoBi2Q+FUKHvEgXUwgw93ksvKlIcQmtXSC3E2h2AWOJ0x2VdF5Y5Tu6Np2Zmw0lLVNojFOmhwE87J+fFJH3ovE9/XUAvtRHewOAt6MB6tzFAX8CYC4iX+Gc+53BmkXgwOEalnBxpitO/1sNgEgK9Dk3pkAeryOvZoassiS5dFF0uYPiXmDHs0O7q+CcZ+mAAz8olEEqdpr4QAMCtXe44G50Qbu4Dc0pBIQ4ADC7EP6vyFlxTnQENMCn3yW3NZxiTmXFZcmGpTvgft7ZCQDFC0W7bS6B6lZ45j5f+LwOPRDPyMRtRvJus951zEVrlUoCqLkHj+JSMJlw19A6zdjxJ0wOrgbO1rnAZUoZAEhFH9VjwOF7fdx1+AYM0srg1MsANrKg72rsyubLADyzO+NFXGntTT2qZfgmC2am6LuorJktjmaXm10AEI9RR2fX2+eRO8QcRcxJhrjciHzZ9X7mvae+eXICNElGLSL3AfgbaDjmezyIwzn3sIh4FzD4bQA/D+CbAXxHksUP+L9hoOZJVaC7/c5x2RxeEBD0AbEzwjhep25GWEGKE1biKBjNimDPXC5IjEHcgMqtLy6BygPIYR24ugt+cM3/O6D8PF/GC4DqZ+16mnU3BrGoG7WDmAsrDO4hSpc4hRhLfX3NFjgcztRyvneEbfLyehgHLXgjAEW5G7djfhEAcdkrOpjiXADPtkzDNBJo6jov4jiLC6HvyrsA8XdEFS9As+EEMPs7PoOrsXWGtkF3AinpLiflott5YchrWZQwuyc8KxjJNjDzADV7IcnBrV3Z9fCYs8zSRYrBGYiZi5bomRmOPhoDxEMkxKhYFOEL9ZMuYrzQnQWOWslfWvurAP6xc+4JyWhevX/qb8y8+30RgYj87ck1TTk53nqnxPLDlHKKL6Wc34ocOHO+bM8MxHLRoiAOZxY+NIswdr+8+b3rNwHxW8KbFXDLt/PQA8s2wuR3n+wfdPXjCDepAig+3Yd/KIRZHJQs4gmu9bZkdEOUWoB0+p/jjshP+5QXua27A9cXxVU/nIs4b1nEoLaYhXwP112OumDR1TosFmwjrpxksQiWHspBA2gu9ftrH/er/O8HgqIOCCBXXmgsO4AgHqiX/Vx0VN9F6J8IYFTG/aJ4DETgiTiuXGiYAwCo/igsIrkFvCQ5ugnOlztJmjj+t87U56hUP94Ns8SFHO5uhDnKOh5rzpwgjQJqEZmjAek3Oud+zQc/KiLP8Nz0MwB8fGSZP4hGVj1txqdb7RSk+7bafAzbsT2Uvh+xTbc4OwZnjsPgrJOo3IqVge0kYu7AD+Db/jmw+LHm+bEPdReeG/83sPiT5nl2T36wdfIHUL0n/t/diAHPGoAWZ12U8TdhxWIbxnJlA9jMQzeGuCON0wLmXQ3gAA3oiLeo0IlVXYsnFtff3Wrqz9+qUCsWqptaJcy3gxXEFtn8PnmI6HRkW0cF6MtA/X4f9gK0N7CW/7vP99cBeX+3vctPhue1F9/UNekrMpYP0cJETECrHFXwvR2Y+cXEXQWqB30+t9kcqwLn7M6QrzXuWGRQ3BvL55WEuGymVuSVAXKTjMU5R1oXC7A7dRng6k+ZBvkXf5Ht6wG81zn3b+jVWxDuPnwlRl4c4Jx7GxrPAJ87rarndE7ndE5PTxp7FdcrALxbRPyyi+8D8MMAfklEXgXgwwC+fkK5P4jxN8I01Cf6SK0OWntYS8FoHQyYUo9E3NGGE/fM3I3FRQPoNalzV4Hdf948P/OXgZVXIOnWvq6Afc9xzZ4MZlgWtzOGM8ht7VheraQcW2Q2lXwLYKRJpSF6AronIqO6kghi8a0IHOpVYOb7xF31cR+M21/Sc73ftFH7dEU7icUsfGc2E535Lb8cBkuJ6PQrmxB6rq28H3Ce069+Cyi/ycf9K5/n/UDhxSHLNXBgnEJs61/mZdFCViZAPNbkAtrrXJSrLL4Qbd/hgSASw/WM2MFzuVt/D1j/AdXpRXG09QOBq3Y3APh8LS5aroRvxXFcehNvH1nc9wQu+1OExlh9/AFsCS0AfNmYQryt9Nvp/7f05NkQ20ZmZZgE3qWlRLFO39HzkElZ7oRTZDqYbDmBYXDmLWNknUHkPOjMv96+X+/adza/Fdnh4hNBPjgbqXDhuqSa7FRxUiA232tlilVXsbipHXxKKWCJBDkuvgBhol4HxIOf0ORvJ/11xJP6egOmKi6ZEVBXN8I3VA9F7oC+5ScCUFuHVeolKXu/EFh5/mb9ILB1ewhP2yhkwlYuuotiXdnKwpQhaMNJxlzoIsV94PuJwXIMKTivHwCK58Xvig8hMgNV8FWdSlTvO8Jz/X6Ka4D6ZPA+IlgPMTo5xeIJ0dk9mZjVqjKAK1eTacaQ4mvTA00WKAPo2L0C/eAM5JUmQ5Pnwv/Y/K7emxwQSBQ8qYLEGniWHTb71OAB2YLzkrg4ysta+3InGpV6OegksZTAXH1rXkUAmwcmAs5lAI/TbgJkQ3shWCuoMgwgOewTgTFgE96Z//6zOynwSnBNd/BhwP1C87zrgXr2YuCiB7atj8QLROutXxfHjPIuGoNqFrgTf0/lclWBWPxlDJQtJYtZJwwBSIt77T63xlOOtA5yNQbzNF8G70mgbRCbtA7Wj+ZMJPPfx7Habw/QGQbq7fjZUnLljOJbsDqhlc5aQaeAM9Cv1XbXaBvIW0MayLMXN7/zrweqP2ye1w+Ey/GyZkceeFSc4paAXAtt4Lq3GGnYlubAuTREI7wiWrufPguGlIMsdxtxAQDU/ylM2uo9ZCP+QiqPLV6Qp/qJ2Ja4tVagrXtb1mNA6UUUQlxu6UUjs/vDt3IPACsPxDcPgENv+jb/Sf/7D4MFSCqqqfSW2QGA5p2bNfaK24ItdrvYvD/eeZg0oNQrP4/aqeKm28J4GGW54dPz2OYFxFwIbh8B1rTTsshSLA5ZgHC4KbrsFxIchc4uUHc6Ivm/zyC9b6U7qllNmrf1wfoAGhg3gHkgWqDdxrsatp8zAOu3GOWxiZTKGj0AVe8BVt7qIDVv2/7sJB+M45iRiQfEu58WzDPy1qgMAiWdLO5aszgB8aEd8WDYx9HVjyM67FPdIiuWT4Tv2n4r4ujKu4LJnJC9udoo8/dd/16Qfx9UQOk75uCPfNxPD3FrEhmsH7UZgtwOLgVouRBbXKS7RxZZuKvD8uGcjLnliP1vdS222lAANrl3zusFgPtL/8/zAXwyTr8xh23tEIj4W+VAuy3nRv+YeloC9dC2qcysfoN0xFNPORoC51GUWf07+s8kHg9UBQvlrOfPC4NRSLG1fDCkUTns7B57q6+Uctl9i+UoWfTAjif1aQIkC+N16utrjWwZAMRzoiXyOoD6Ea9QNLhVtw4ArqBfouk/+Dy1z/AEAaaC5P1xOWonvXLBX/NNBYVfCXH1RKXSQkGQdAQ58dqQuIHrBHjgJK6/Dc+YzkVpLfBVpe4XBP1Klq5kntGtD5eZE22NlmkPKB6HGKjBE4hPR6AunzVNjsT0VNlAjgXose0C/OBRaw8jHb/H5QC0+mXdjZCu+ABw6O9fYu5ZOdgtOvEIxNr9Nq6hfLQGcE5cNYasHRFzjEOLonK7DGDKQbdx9LSZniAEIo+CCvr4SCin8JPf3cgcElKwvNJwiEqt32hye9AeXafTkeyAa3Gh2w85q6G0T4B498RAFin1JioRO+mZciBqgLkFzkAAYvcBoPj88WXnxCN91AL5BJvtYWPm8XlNpLML1MBIGZdBm5y9Pw5wHzpssglNAXUgbKUVcJWDBoCD/we46U+7KXjs7ABbxEUrOKt8FAjAN080/O0pt4yScqzfhJT6xEnRlh4kQ/4AUGRkuUC3furbWZWG9T5Q60nACqhUsahc7ntt65t6GSZwK5K5Gubs7AuB8t3ddHpghq1Y2HqjuDRNrNaZKwMAVP3hOO65LcuSIV9BAGh9fzUj5sgBvBIpE6sHQ59qXn1cenbxwDQu3EzPnPmUgzjHS2cYqHOdMsLsZsoJJGAcSI+Jc1qcfXYBIBO0iGPwfba8DtxMwGwHQdG0/kjw6la7YCqm9sPrj4SjxEPEbR/rhjWlKeKk2f1BQapU7wOi4JnIF2fe6kKtIOoPBJl5tQoLmYpGyhtA+UioS+swicrTxU0eJPHA7cCeL3d/HUz49Lj5zr3A1t/y6T8W8kitNrRcpj57Zy07JQWuI4E0gbIqsssvyCS2xBx/RWHPD+8UlHlXF5VLNChe0XQTuHAzfe4U5REtTybSGQbqlEbaRQ6Bcw48h0B1FFc4kXNMaQjQ2LaTt/TRhDX6SfukqoJLztbTmhPwwwAAIABJREFU28Vw3PnWg8CBt8sWOlgS2bSTwovl2cexe7BoMF/f3uK2sIioOdzs/p5dmV/U2gMgO0EEFDnd92x0SeIFuRB7H0yPT68/ADiv1C1fFJSyVx4EDjyn3i6Czwny45y5aJZzNpiZKQA8RBbIKTADzeGd+pd9vfxuK6s0vBJkz+vfC8HzfxjHAdA4rxqqm1HOWPAG7LZNMe8cZXlyfHSiQC0iXwXgdWiG4E9739UvAvDTAP4CwLc653oEFQPgnAPlPtDNvbOAeEjGmjOb2pRy5bWyST1dllrAjMx/TQ7i1V/y/HloJ3y5BSz8Vr8sGm4PCD6U2abU3QgcrMVl52y2j4Mik7vbus8LgyPLkm/7jA6gqFwaCItUeXusmLTGnn6/9fXgUGkLId3FrwXK/2yk8xM+zbOXg87YNh8H9R5OeT/aeXn46rBYt5y6JZP2dPB6H9f30/b/fAyVNeo4BbCj9D0Ky5T+/8JRi0gJ4McAfAWaSwP+SETeAuCfAHgpGg97Xwngt+wcEpDu45SncMlDgMzga3kHSw/R5Pwyt/GN21EsKkqESxOB+FCNHnjwoFEdoHVNWuyEdua4T/VhXNXh9o0dD/bli8IkXzwHKLy1yOyeYN/btuVaEBWUzwoWETmzpSnH2HM0lLai95NNIZPTiixzb8PIedaQzkTrUlc0jt7bKGkBoHgxsJ248iyfFfo0Z7t7mlx0jhT8iucFjrjeJ1lyTk7sw1c/hOiSgL64uBrKa5WyGyg+p9IYkO4F6JO76eUkOeovAPBXzrm/BgAReTOaywZKNAZn6cUCXTK5FmPipmFTwBhIvKoREDMI86EM65YZwPYj0lLmlGSf75A2nBzhA17ppBYKfLSZD6QQ182XoG77rbxeAYbrgFPxwb3Agmyu08nnriW2uR40Uo98bfwBkJ0C4IOO3He6+cmF/G6jbYexa4t8mxheDlN72/Zgit4rWIW7CVdPAIdeXLBLMv7WR8b1kQB9StSnmFPSw1b4PWISLHHFFaB6U/MYicwuGWVdBWovGolEH6ysHADSTTnpIYDOgvPp+RQ5SaB+FqI9JD4K4AvRiEJ+E8BfAviJbOoUpMcANLA5x2wB9BRwZpAec7tJm95Yq/SGbCVJHOJjGb5cuaDDF4Z/lMOPAfvkl2LHTxIWD1iiBLa7jQayXqP0PNruEre5qY4gB8RjTfwqitfaXFN5Kbfdd3ouuhhYj3HfsEHf3Qj9r25QV2u6OJZvCH8Y2PN121KrnCmT/RSsDkxTtwx4F7eFXYQeVpEEZHW3IBfCmFUxU3TIpaeclojjjuq8IUAfiazv9qlpnmfV2jnn3oUGsPspPTFkWVQMHe2ccjODed2XEQbYToaia6MyXuH6yPJrDcRctpZbFMS90TVKoFNy7QQiBeKibMQbAMwjtsVtMUC3dcjILHlSqhkgA/ZRRR+b2mFrujEXEpgnLRfhCi9d2HPjzd0IcfWi2jUv8C70/7oOoM5mk0qbctPscuAkKOfGoPh8YP2+5lnFIfM7ECw5riLyyseLPADgCrDySle5QJw6uiKP+oHA2crtiA7dHIdsWqnPJnvQVG/CfJ9IJwnUHwXwHPr/2QAeGp+cOsKcZIlCxwKFksMyAA40E1v9hvAFlpLhuNsLRhPRSHp9/FFusc957gNieXcqR69uoUN8l1+vHNc4+huVSyZUuIJIS+/S+O+gOiLmbC3gLgyb66ELDXJ0HM5ycjdeW9TuwGh3xTei8/xtL6Q17rk8CjGInSSloK1+VfT6ruoPgZLB3INy/X6yDOHDQHSKtN2hvQDB2RYdJdcxuXoL6V0OgV2/O5m/9CgtC+WkNGTS2AL4USZ8P50kUP8RgBeIyP0APoZGefhNo1NH5i+Zo5/mtnVE3mUK6jtd8AbCtpcpkl+mnuo8mEeuVI9RwWC5uEzLT8U2UgYzu8z1aeHkIhD5tFAyTa7Yc53ByRSfj/Zmk+JykGP33UYDhIMonTpkwNcZIg+L6v14t6UAaYlGiksADHFSNl//XebG96nqzN7yhCxiLHnqSYF3BNp0c0xUtgdlvt2GSUVw9eMkm77aHVPpGFS9y6oC1l4HsOXBe/fL7ZONLeCOkMNHZQ+Y8rVtPrnLE08MqJ1zaxH5TjSX3ZYAfsY5l9E6ZahvgOV2GVMcBDF1wBsw/VmwGIW99zEn3pa7tF2wbnLvYI5yebXimUS23rYvcyw9cgZF9zL21uFqFyDk9lBG9bEYCAcvFh15ojHlss1j3QTedaJsZW42ug37AJEfaqDx/aHpy7vi+LPUVO6gezku0HDXRTJGJnHTLBedIK8+TlOyDhB7UVnBohwVffxVHNc6xaiAGvkQN8ab+2QA6/JZwI5XfxUfD4rbfb+4Hv46sOd92Wz9vZCHXjfGIpZNyQTvkxN9iDvBzDclEXGu+rE48Mj2jT0HQaL0N/r/B8bbXPdZl3TiHhN4K0etFwos1wE0ygK47J02LegmNOYq2a1nHyfR6WcD+DVfPo7OHHPugE8fQOdEIJZNex83bLkFjSw7vJXC0gNCdRhu0ikz4Kp6gcMnQ58vqyB62p4De3q45a5Qbo4mWX0cRdGYzo0jKi3bU4qpXxGLk7U8Qk6QNdfvBw68nFtvPTpcN/daAsDFzyTlJV1isCl3PUBS/q9wzh27VvFT52Ti2JNEWU9axuDbhPvmW4kBW2TCiksGEOuS2CHK3eoxlhazYIGwvwa2fZ/NyFyq5RSBdtLm1u/cjSksc1VqzdYOQj+kfp+BvLhjzOLXlm+FL7scbCed/41uKGfxDB0rV3FSdWh/E3VnuqoagAYaebUCdVkGX9pjRB8pIzFoE35cNDavDKBXb2t+hfxyyx0IoPx8isyWHBk3vhZpvuV3Ajt6kcGv+7APh3iDu7Krxw7WJ0EnJ1Q5p3M6p3M6p2OhTx2O2qIhs5o2Xs7JeMZErc+aJLVaGCtPzZEl8kgVkJsoJPmS2YX/zNdXwE1/eGbht/SzO0kO+1hob4HAVUe7lOuZZ0/s90JN0YZ2ENx3HbnzgPhoSGRU+fcdK46E265Bp+wsp/EumN8V62DVwSaYlu20Q6zEVT8kfOPKSbjHPW4yufkBztt9gMwQL5PogUQb7c0wLxihCzHEmu6NQQmp8ujZg0F0Ve9jeJfYhx0TuG3rjtZjok9toFaaejlnh5LLMIcOb2xqH5w7YAN0wXjKR2dzvTRdUQQlR+WAG77ci96Mb+uuxise0AArA4moNUjm7ryoviqP1htTbgBrXwZf1JpNn9wPCPT3FzCuz9q+Sful9GIP9Y6HIAYRAk8VZxzSIZayiIGazfJSKhM7eFOcMzCOjsV87whWJnLBngubeO8DYvlwC4RX0N7qYqa5Zv8vtwdHUVweX8empoPC1k1UR+s2pbSuTzGdXaA+7g46DScqfdzgUY6pDxIdhOm8Imf1cwGu+zK2PYjO3htkxdUNtD6Z+Wi6pXDr3Jp+I+QBNCCtbZAqTI5yNyj5cuCc6x+gC8aD/cSHk6h/qgrRfYfVjWBW6W4ELl+9CR5WAYi3JRxiqV2XUxPkDzBp//DMG1r4T8KUb4rb3pyfddM5VuJq17qF3HTcRH6sLc66z1tdeiDF3Yh9wHSImDKX6FrG4oSpC3s6ctRT7m4bk66XehxADR1d1wk9dEz9KD5E2vdGWAQClW0rra46794FHvJt+2u9x+9R4G5/y8iClKTVjeBPpD2ifi2Ad3lXYiXh+0Gvk6oI2ECKOJl1NSM5cHZVF4jTfhl7+rOQYMYF+H6qQ71KkMJzP3i/W/vyD+tQ78rFttFplzsjrH2nJ0r1JC25ii2fFU76nQYNiusy1jmW7bl5CvQyes09IwUjMgDN4s0ezpepegydOyS53p21XTntMVY2qb/3qOAR6TejswvUOZOhI3PGGbnakKmeBc6ADdAW95yCcx8A1Zlns970vhC07B0D+NrX53ANbPtZ9Je+Xp9YAs/3dfk0F3yBuDWwSu7wK8ogwoicQSEAm5oFruvQpiJBLUvOnANnS6xg9UnkG8VAyTRNIf7YP3H9eoBJDsiRlcqaXf60qLaPfX1rHZwLZVc1UFr21R4gqo8F0ZFbhvsvp9AUXckmflQA2E7AjLki5Ct9Uytg3VlXD8YiyVR8AaD1KwKQCeiEsqox+oIeUO/z2HxEOrtA3QHOKaZKm5bhKQfQQBekx3LPUwFotFc+xEAhiZKLQbIsgGd6scMjvl4PO2Dm67t1C3imH9nlPIBuVJb/rW4AoL5ReXR7M0pS/9ax1JrAnhYx5Wzrur9vRvVLJjzafTigFgqjts7uDO3Q16XE8mbOS+uhQXzpAtc58uHCgKBMyPuApecqy63NFdTAMAj3+VLvU/4WCzttdEJUQfJGAto9ug7mnOt3hJ0F91MkzujJq9gJC56JnfvdXYLS2Ov0LPe6x3mQLaFRQC0izwHwHwDci6bpP+Wce52IXAHwiwDuA/BBAN/gnLsmIgWAn0NjMPntzrn3iMgugH8P4HPQDOnrAL7KuYywjN0iWp2VyqCOonAZIxvss0wA7MGdAlCbnrgsC5zHeOJjIK4oTspNOonDZv75M8ifyeM+/UfXwMID7m1bXU64qNAKcqvDuG1s8cC/ShFwJbsMXsS4b7idub6ZJPpI+8k1/RO1D43HwZRKISDuKcMKK32fFUW4Wbx9T5cT33pfEM+4yp6dU3yeTAHjsSBTZeKxO4XIBS+BdvteywTJl0kEsn4f3QKf86qosn7y78aHlFp3DqQTidoxcIq1paR8C+BbB11PPUe9BvBPnXPvFJGLAN4hIr8D4FsA/K6/ueW1AF4L4DVoLgR4AMB3A/ghAN8G4NUAHnXOfTYAiMgLEbExCUXcROZjpb4b+qgPyPvSplxNn1/rocHeZx2Qgk5vXHqukveScG+R2ZkEfxR3e7n15TnwBzeb50/UwPYqpL+g11CRqV/kx8QPzFXVrW9UbxrAOfm8RWxRwWSCdpJOKRVLKIl3nNRWrUbwGb5GZ0eSprfK4kVFF6rtedARLO4It+W0aR4Hln/SPB/QeNq542S44k2tZ4ZIfJqiJJPIJTkqA9r7K/mQEZuAWh4F2xvlL8XhCuR4IMxtDYsU2TO0lj1KuUNQuf5koLfc6bbpn2IZtXPuYQAP++cnReS9aPxNfx2AL/XR3gDg7WiAWo2d+HKAZwD4EOXZrzUZvA0C47kL2cbG9xkOnY6bcspQOdsC4zlBoLuTzwEUEHqb5aXKNZZFAF121HTJv/+wA677AX5xDWz5OOxsSH0us4giqiuZAioxp2kN5lxeUZzM+xxA67uIizbS6sLmJAZaS85dEXhb9WndmZKycV4Hy5LZc+yttXo8XFXJzmPI/nyCSwLLFn/IymiKewn2ma4mkQXCzreEIUZEzF1bosi2jU+QtRC1u7oWFgMti5XG1inS3K4gag9DY66fU3cTmwrih2myjFpE7gPwN9BwzPd4EIdz7mERudtH+20APw/gmwF8hw/7GQBvE5GXAfhdAG9wjr2GJ2S56+yQjzNko1tMANMpNMbkbgpZhyhy1AdQaTwFo1y8K362fLgO69nSdblI5+JJYIlfVn7CLms6Op1RxFngMGUBy9GkvuFnXdyK7oLjKK/CBRFSWXTFPIJYnq1Om6rHwsLPlxvo4udAY2DEmO3bwQ3tXPosjNI+G/NNtN7OJaDNljbUZqWKZNiRbijR97Bi21XBIZosu3Fr2tFIftPeTxPmsC4EZwWoReQCgF8F8I+dc09Ixm2mc26Nxq0phz0oIs9FIxb5cjR3KH6Rc+69ZibVFHBdovdOwpxvhhz1AX/WW90AxwIc/UNaEyblri2uMvpMRp129LZxzheGtUayzW/FAnVwQrQmgCsIzIY4timWLkwMtH1kvWczu6ifMrLGFQF1SW1X4v6a026kBRLjiq/6kXDiURA46iEx2ti7OoF+UAaOR6Gtu7YKYTcyc2Sbvg6L1Fp3y4+GBam8gMg/vIbzrTnMGLQ+3+ddnUdZhLjLdcep5bGT9vVZAGoRmaMB6Tc6537NBz8qIs/w3PQzAHy8Lw+vOPw1AL8mIjWArwGQAeqpXGlqI5u+ppW1zyk/gHarM3QhLdMUriU36McCVBpN/48mXC6yp0KVfg74iA50ej9HACOWO3M7Wi66CgCtcedFEJ0wh5rWM6UhRWoa1tdlUzjDdEFToLV2IyvqKD7cwm1vRUyZSx5a6xkyNy0E2N6l+CMW/5Q2WRBz78fa8gNh+hVizz8sg4xabe1ZiVzcit0GK0DrIlaRwroQYDZybjJ3bSl7j4OqMwLU0rDOrwfwXufcv6FXbwHwSgA/7H//Y08eXwzgz71VyALAZ6KRadu0znA1Uyj3YUZ/uMwBkhz1fagxXAuHTbGfjsKT/9lkj1GtIFHFoX8+BJ0gpAnHdsBMaxJzKFDP1aVnGXyM1K7/ew5ZtqRxhnYWY4mrVLt4R1FkvgsAQEJ7C9ApRcq4XeR4sWbxmKGDKQuY93W2aTJ9OKb/Ojut5F1f/44VJWlcydUnkemyEloEmFXhud2h6SXBdahHiSBemZfoWFZVdUhXEVDreMzpGI5KTzVQA/hiAK8A8G4R8d638X1oAPqXRORVAD4M4Ot78ngegB/3oF+gueD2V7OxU1DYhIbcwupcGAPGm67GQ4czBkE7k8fQe4vz5WgKRJVrAFrJu1xuAZfzSvNc0qk9Bmig4XisbzhK/j5CxDMU3hcGBFCN2mRE0NeR3TSo/xD6V9OvKf5eETjpiEMmHcyWtwqp6aTk0I5yyq5saLwN9e1koNbnIYVzHfpOAFR8xN/3P4vSlHgqVobd/aoKu55Iz+IXysVsPKhOUvqfHFCf3YsDPpzeGr1BPaeA6xTOeRPQzlot5CbRQJg1eWp0B0sa1ir4/O/KAX/qgeSaAz7dT5b75o3pHhD6hoF37YBbJJdWObea9KVts9o4RFmQzSxo6fs+gEmBOj0CrW3WncCsIEB2JKN2jeJVn4Hm3WXPA91FZmXWAaJOOwh0BkFx5A5uaIxx+FGBGiDdBB0SmhkgXCXjWKcVK6fZkkZpu2guata4fAoUaHyBM1BrfTT/vfnxMIIpOQf59JtPs4sDcnarORqavIOUWbEtYnncFBrijK24YyYOg046/qJJihjU9b2OggsAdn2bmKNm7obN/yJQSeJabeI2jKWh6H3f3ZTZc7xM5pULmagCsaT2OsRAckjPQCPfb78VyWHHgAPH6R0vAx0ztNPoU0L39V9WzOJ/C3quHYI8qe6ajq6TxagFVGfXQYnFGYyJrEtprVAQgzzQvSbtuHjVMyD6OH2aCtRMdTJxNhVbDAJ2Usex5YyxCbbi5iaQxRWaYfSsg/egDuKObQEuqRJMuv3I5a4JnAuJ7WE17lRObAxN4bKt/si9T+Nw24CGa9bPywvT2gUwb4FagIXvkKoKXPkUWfymjMfYdH2c9VC/9AFSRRmWggjBtf907K3qZCfjw3O7W3aKpWK3oTkn6HLnW0XifvaoTJ6mOQfqpy6vKRh/XHXOcdft/7BBxeSok3yY8wEasZ1yzwvECrV0gDPnxW1dSPcEX9oXg8rR/teDNMTpTUnHaZgL5NOeKu5YuW5btyVYjazJWiGnJB5a0DbZVQyly+02rHHF4X3jyyqDFazafyx3bscuSPTh4sNhbRYk4rDcJmjcyCGZ61oksehqU4bCiva0BGprZT8rdNIXmPVxNOn7DreT5pVMhjSPAs1WHfCyQf+8MrafPLF4osypQ1Q2OMTNpnGOSoOigKn5Gem5H1oumuLs+n7YKYP52LqydyRDXO7YODnKtXdoYcoC9cg65IDcuSCnZuWrgmgE1CD7a/+rvlk0r9YQgCKxxRLveNbJ+63CZig2XRDHpj8CnV2gzvpWON1qmMST8yRAewio0zgpoPa91+dSuvE4D0dgxHnyAFeXqVxulavDQBuYOKq1oznBCdFSOikLhO/uEIle2x3JZY8ulxeBi2azsqlAPUWuvsnOwUo7VK+huBy/kDCGagSzvTX98m6NxRGad5UGJFRZg8XFDIfWZ4sWCkfpjwtTTpCjPr/c9pzO6ZzO6YzT2eWoT3vrvClt4tbDWh772nIULifidilu64yIOIrIMx7nmeEEayMwy1Fn6mTFPSq12+WBeDk2JbWZBmIuTBB2E3NpZPQAsOenE19uC9AuBcNc89idR584zKKxYhSzrIE0ufxTbrdVIpIoKPLRTXWwLJw4nsVI8/jlsnTHw6KXKqkLEPdpavLHYUrp+Dkrog8RKQH8MYCPOedeIiL3A3gzmovP3gngFc65pfcJ8iY0Bl8vd849JCL3oDnd+Bw0UtEPOue+JluYpRgDpmn9zypNBfex/ZDV5NNva2vqww5omzhH7FxH07U+LhAGfSmkYKJnbtsmi8mUz5hO2FycHDkDJNJKsIKKt+b6zBYEFjgzwI+xqLDCrfdJNTdS1k4ZQ3355N5HQOYyC8ME4Gfiw7Zs0w40zpPZtl0B3LIayY3LlpExwtL4FqgfM03lqF+NxjeHWvH/SwA/6px7s4j8BIBXAfhxAC8H8JNoTit+Fxo/1f8HgN9xzr0OAETkc3pLShVjU7iwTyHMztKm2ueOzJnjElAooB5SWczJrChOCzqwOSAQh2ItQh3N+kAdrXCL+510SMkIi7glxFYdabrosloKN7+Ti/uUy5ukKE7ijpJhG2FW2my8gbApYFQlz0McaV8dUoqsQZKxt0Z8rH8nBXKX3/n1lZPWsfWgSDuEE6IpTpmeDeBrAfwggH/ij4K/GMA3+ShvAPAv0AB1zh/12zQ/59yf9hbI28QpCoy+/M4KHcc2f1Otvg7mAxq0PBg1+crZoNseAEnyXxvfit/nADj9PxUP9Ikx2DpgiEzuMAHf1u6eytM+KEH9RKx8ja5fkL72Do3DvkM6luhkTL515tnMJ5PREICPIupfYDOxYZJVBP4sxtC8F8Z7tmgC+rEjd8iQT6TOzxZH/W8BfA+Ai/7/OwBc9y5NAeCjaC4TAIA3AvgFANtofIQAwI8B+EUR+U4A/xnAzzrnHsqWlpqVTbEvnbI9O046zeP4uTYMtj2Rza0QwG6FcMmJZSJVozkgA8S20yvXtRDhugxxhim3PWiF4H9LF5sW9pEJCi42CbOooLi6xZ6Dbi4xFpUpYMqcfEqpnDbtmyjvnrE3CagH3mfL2IDTPoo3O9aPWN9Ox8UM4T0fTBor1kn7Vau8coHZuXjyNhljvee9BMDHnXPvEJEv1WAjqgMA59x1AF8dvXDut70/6q/y794lIp/lnHvMLDSVdU7Z4ndqtYH8biydhkJzyuQZu7Ng+fNalS3MJYAOKPi4B9RYkcBJHtJWMs0fmf85bhqvT07KYFUgcDwlRTyxeaO7CYllpEfZ8hYS6j4kCkjFgUM0eLhmQl5KU/vWKoNlxZsSo08K/Pxuje6iykp1JnM3muy6NN0tF7j1Y/fs0aUp3vNeKiJfg4ZLvoSGw74sIjPPVT8bQJ5DBuCcu4pGyfgmEXkrgC9BzoNeTq65qQb8JDiJ01BgTi1i7G6CZdRayEzCfkkk5rr1l7kTrduh6wL0FL8mVv3SZ4urnIEsCORoW+pJoJVwcX1gNJR34caLb8YA9RBo5BbStoxMAamM/ih1OCpzkyu/dZmKwFzMEFBOw6ac0SjoWx8iMDJA7A8HeOqtPpxz3wvgewHAc9T/zDn3D0TklwG8DI3lxyvR74/6xQD+m3Pulr8g93lolI02rUAdz4bwhix0qlJxUxAx85oY/7TyHWrHOvnVZ1YK8qEB/eWj4nyq7KiLoxhh1jdm+S9zO2uaUDmQTCc4W42M6W/m5MdSzlKDRS5TlGpDClZk3qf9O0Z0FtXV2LGwLH+IjtNpfzq22awPaFBNXfcK7RhZwWju5riNmoby3XfNHwDcRpZOq7Mlo7boNQDeLCI/AOBdaMzvcvT5AP4vEVmj+cQ/7Zz7o2xs3mazIicnt04nANNpyLKP8xsdJ/izrap1grBGGAW8tWOOmTlqGH1uljvwf2+djTBeoFk+qXUoZRiomVKQmzoW+kCyDwTTdH31aMc6MSx9dr0pcX+Mbe8QA8R5WQuBVT4Qc7FHFU11vkXi64PFHZHLVE2f2a0zcT8rOB8AuKCgjOA1sdcC6Hjo7Pqjfit9TUEXqIE8UKQKok3FHlMB8zg/1El/lqu+gFsAdnzYrgC3k4kaizaA+IKBlEbL/KZW1EhXUZh+Yx4jOcA+CkBMAeq+dFPi5pSxSn1MCb9jcC0ncH9DdWe/3RxmPefipPUcU4dcGZrXTAJQs1jJEp9xOJPmtXTADR9hWwJQM6fdeo50kL/jnmb+qA9HrMBD28AWsAf67ThFIcAxc8THmBcQuGO9bbxGEH/U9L52JPrwv2P8IkwRgViiDw7PAZHml97/2gfUKVmiFssCZApjkKOxY2hoFzJF7MHEQJ36ZrbijlX8skgkB55D9u/8rfp86KQLNesj0v6vXLwwDS0A1vxnzOCDTgcUNyfWOgE6u0DNl2EMAXX6kdMPVwyAfh/4HAUox0zso37cMfXjNusC+KT/n82XKgLnNdWNgVyfp+xCjtKH1q4oZwUReVRDv/y3r27WrOgTCfSJM46Do1Zy6Mpjx5AFnLl+GVLE5to+5Kgs4pwz8u427sSDTGl5jupjLUy57xUtyqSY1B3nGjEunQM1Yrvco55AG7Mdy9FRQOY0tstT82Mg1nc8WVbJ+748LUucMRxoH4351JZ8Md3OAv1AneMckQnva0sKbmkbTmJXlhPrcH/o7GaucxOFaI7GcPh985EZrPQI/1h9A39jCyfG4IFVB6usKnnfAeqzq0w8OYqAImcyZIRZKzsfXz0NoM6e7tpQdHXUAcADWNvTntxCPNDVB4h13DmdmAz2lRFniDa1YMhx7dbCkctjbFmb0GmA4BhlrbXYtvJUCjuOHV5Jukz8AAAgAElEQVSOE+/d6fY8V0a4Ei9MvAhZnDqLScw6ZVwDpOXxr1Jqgfa05KhzH35o1QPsrQzfGn3SlK3XMX3JyZw6yRH12q09/7tEA9aAfbowLS9n3pUO5j5RgfV/bks+ZRcyBNQpHQeg5vKxFpbjBvBN0liWIH27i+MkS0ShlMqap8rg0zSsZO6tSwLuFneeU4qn4+1pCdSbDpxUXq10XAA9dWvO6YYm7HFYRCgNcWF6sOUw8x7oP2bLA5X7dm28T/O2wH6KJYD1jsvbVHmntKnScEjENkWcMSXdmDR9YyQF6qMsKGO/V1/cAtNAzxI9WQtSXxoltRKZDVTA2kU+LYF6SEaaozGDPQXMqVvwTQeypXjJ0VEWqlwZDDTqC4EH3CECd811yCnyeKBawJDK9PyvswCezKhkrE5h6FtPVbT6+I7SiVVGrtwh29y+tH1pjkrWIqmnGYBxQD1kJ71J+Jh4U+Yaz2tNFznTGkgHxOM/LT/txxSjnpZAvSkHnEvXN3k5jK0gclzIkCOfITopOXluC9tX3gxZQO0diGvE3DOHJ+ndEKhzOgBuykTtO349ZQxl+rhtMtejhLnIDC4wud2e0qay4qF01OftIpRaL1ggx8TAx0X3iR3Sulnvxy6EUwG7MJ6t/NK2q45mlsTjvNN0SmcBqEXkMoCfBvBZaKr0bQDeB+AXAdwH4IMAvsE5d01ECgA/B+D5AL7dOfceEdkF8O8BfA6az3cdwFc5526YBU7hqHMfIwcg1nslBmoL+CJzNgwPSqVNTauG8mKawsVx2JyedaBW6PZZ2p+WApEBwQLndU89LRqrZNxk0RxSlubqkY5NbXMK5gmZ3LlV1nFQunNJv+EyCVPgLkAeCY06JmGdhSzpA3PxYkWhafWBo4G1NWf78mKg1rhsy5/Ty6R0FoAawOsA/JZz7mUisgCwC+D7APyuc+6HReS1aC4IeA2ArwTwAIDvBvBDaED91QAedc59NgCIyAsRr+sxZSbDJLJWPz4wkUvTN/lz73PPx6lI2pT6ZM1pPAXqJejwSzdNBMRWvimoD8m2c3Xr67d0W3scYL1JXhqXZ9O6+94N5TvWOdMY4oWW+1/DVskzj9MhoOYbU6wFjeL27o5SIOd4ltXHWAxIRVC8CCnlOP20n3LlnvJ8HlWciFxC4+nu9QDgnFt6V6Zfh+bCAPjfv+ufcxcHfEzzdM69zznXdyj5nM7pnM7pU4fOAEf9XACPAfhZEflcAO9AwyHf45x7GACccw+LyN0+/v/X3pnGSnaUZ/j5uvveOzMeg222OCZRABESCJHFYmyTKIRYxFgo5AebEhYloEhZTHD+BMIfFCEBgYSYhLCIJUYshhCHWESRWQQiwgsGbAyBGIwx2MZ4ZezxzJ3b93ZXflRV13uqq/r0XXqmJc4rXXXdOnVqr7e+76s6VVcAHwZeDvxJ8PsA8BkzewHweeAS59z3qikOq08S5lVFchud3toR0JjZZ6k6uRSxE9X7eM7GNbt1CVukT8u3wOX6Tm63nmXvzyXnWQuTuWQ9rwSjEvVOF3l3Ky2VDgybFd8slX6nC+glaFtt0DRpxedxTOi1azB1x6Dl9VySqEuLd7WxIv9XJe4209GsNqotWEvcrZJ8bR1qVlsvAVEPgKcAFzrnrjGzi/FmjiLC+dQvyfyuDxcHPAc4D7jWzM5xzn2nGMk8g7fyzOVh24iCsn3RSh0xP3R83kE9r631REBU4ImOU1KX9RPaeUil9hFMJIjSImYbpJ6sZvrYSfsotmuCmDVZ18hnL9p71rrMmLT1cl0mXW0Tqf/G82D6sJBfp/WclcEyUp8ynZTKP4ftu+QuLuzWUBIY1CSjYQuTUGORVNNTIs+IeZHn281L1LcBtznnrgn/fxJP1Hea2elBmj4duGtWJGHh8DLgMjMbAxfgL8udDqsS9TwDuk26U79ZA0okUFdquPyd0oxdCtu2A2E7Hy3uZpCrrT7+H8u7QZOUVSIDP+CPBbde4QXNBcmIeWzQs8IpCuSp7VPFnHVlGs92JdudTMK7tUfX0ox1u5Hayh1jajXI6XnjJLcbg8W21K1qtUkmL4deU5YTeU72JUFoVlo1zJJyS2speV/VPARGdLV0SxOWprUgzHtxwE/M7FYze4Jz7kbgd4Bvh79XAG+m/eKAZwLfDrtCVoEnAl+sJnqk4r8ToobZZFBT1wYpjupsvssBV90JUEsPZpelpdNOqYSqIo9JKvImEzNI3JczfkCIGsn7qgzI7dTHdgi6cEiX9cVft8yV8tBSz1Nmnu2glF5b2eI7uRCiUm4Wh/UpS6UwqYdYDjeUthpNx5Wnrc8tELTF9+doUxMCi+/TT4RXzLuMu6p2tFu0mbb6NLfilQSO0ruztJkFYDu7Pi4EPhJI9mbgj/DZ/YSZvRJ/W8sLZ7z/OOBd4fbyHvBf1K7hgu0T9aywtTvSSna1Ac2PQdpUs13aFedS5+bttDqganujcy1DTRybTKRnt4E/qxrYusP/3vtdOBBOEls5KQ3I3qoMbs3DnKQ9c7LK4+iLSp5fzEvBnZtKZqBIZjtFqb8V4ncjJpOj20ya5Hgo+Snt2ZZ6GA9TmFGMa1Qub0/en8oH2bMdTkA97Qv9grtA6i5PL0vHFaT/WXmIKPbHXlbGNQmbj/e8HUs7Ykp53GMs7cUBoxfRSlCTAVszjczboD1R91ZozrA1CWavsFvbdZsKDLMPT5LtS0rOmz+Ee27x7nvD4F93cHqop/0DWA0dvL+vQACVwVJzN1AKU1v4nVeCzz/UKPWdiD342Eo1FyXc6I6/43XYCpLr1gZshrbaHKcTOuPvrEtSJs0Zj3WxdKXfWt+fpQ/Q76fnrdpcBT2VggMOB63rwFryy9eKYnrx/d5KiqPXh/EMbSKPb1J/43I6mseYbr8wgTSEjNVCneSTzcp0HLEx3AgGn+Jn6+IAd4hWkixOMbX9vYp8VXtVVN8VIe15bKARldXlKrYjQe/WJq2knBG1Uyn6CDx4g3f/4H64JZDG6aEc+w02wnvjLdgK7pVNIYDCANEB3etXCLq0yl8Ia/2wuDULc7SF9etSmquZCirIJV83SqTjRmWCGYW6HY1gGNvCpbOA7tmEQ8E/3qeqnwA8TBbExiSC1nWztRDXSWPYH8q/Ujrn35ick9/vw9EwMR8uaIs9S+for5qfsCFN5ncO0wQhyz1FPHI1pXto2DyfP2KypOLShDXO/KP7YD/5RZje0Cb5mlxYbmkSWxkIqUdC7gnBr0J/f3JPeGLWpL9HWFqiHv1UbF2UZ/+p3R1zoCiNiQptK+CyBqhnco4E57SXVqXLtkWNHDNs9W5Edv+ht2OOg5nJrcNd4UKBO0f+Zi4Qyc7SBRdjSWe8BYNQF5MB0KNxSYZKU1Pkm5UlJ/baM0VtkIwr/hPJVupGy1TqWzUJNIYdRSnPJeIciVsxIUbz5Ab+8MJYZRsODod4J03m0u7JQ+NEiHoZT8TDeumqv54lgp6cNSST7n1bKY8DIeL7JNJRiSQBC5N87a4FnThi9R0Kcd28md4bGJwaJVN5byubgHI4Ut5vDRPLful3j5KMla6b1MmxNxTNw1K+JkTeg9XASYM1GAhpQ72v7QWWlqi37muqvW32xQgNFwdjVd2O5HwszY4uV3V2gjnIecpGWHtvRhxzQaRot+nJGGRHwLBMclsuEcEREd3ihc6q3G2OfSfWLPaMxhHgStr5zWhKgCVyhySpQ5lQx67pjr8NyUsG6rj0nOb7ORpliHksnIapSxv3j9J7A1KdRhIcky7dWXeywcYlSVo3QEXZZd0SETtXOCFhnAjrFAf7es2y/XAj5eXQOBH9UEh/YnIhxT8ikXZpeWZAIrl86acv9QDN7jx0cEfUNrK0Y7lqFs5obYkaRE/a8ubNaXNzD3ggxP/YQbM/RfSkDKuRqA3W4mSwAavB3DMI3LHAu22Xl6iPHsqksxlEpwO6Rq69ElkXCLmhblfiaiXw2nuSz5nqe0v8s9KfIl3ZhqWLVTHckduTqjsce2IBP8hvDx344SHf667Z2WMHXzHYCu9F6aOkcsb3Smi71lIRB8SW5GdzLLeEFaSwXA3fcInoYpyztl/3rPkNxKAwkCMR/XiL6jlJkXwn29Gdv9wa/IQY3evi1jqPTb/mEjGtkdKL8R4S8n5gDHeECTqS97qDoyEvR0ia0gbpWPIGOZP8ontTJ7rw20ds46SJZYVUT6Wm1sPoVEMopZu3UyTqmNZ+a5J3vv6np6DeupXyfq9Ld9fG91cMHiFCyEpIfP8Y9gf/faJJLQpLS9QPDsuDPiKX0GpSGUwTfSS6EsEXCR3q5LnDFeg2st+ONF9ceCkszIzWYRikgPUwonXR6uhIjkUweEhm+sCY3H0wsKZdNFZlHOQNopZ8bYeQYbrz1+yT94yaxDtJj5TfNUn7tJ5/Z4b5vglX3iSkZVNCnXw3JKSziUjPwe+oEPKGPNdvi2K8skGBA5bqep3p8XGUZO446rwpBDxpR7+wbsyD4l4XgtdvYEqkPSZJ19HPARb8VkgTwz7K9vGIMU2be94Wmm7e3WOz7gu/aw5OCp4Hnb88HBLZ5euA0f+gTMax/Y44eFASfLSYZ2LZN2WNYVFYWqJeF5WxdJFwL5fYopmjFrZkL7Xm/zBbco9QEoxSZc1ePivutnTmQZ6XXP3vZ/FGgj4UfnukAX/EwbrYRSNpRElo7KQexUY6Ynrdt7abcTuX3IwLbs1Dj2RCKG2D1rOGRuNmfLePmmXUsJrFWNwBqYwDKN7sNpHuXZnkNoSUowR7lESSQ5LErTtKo6S4z4RExUyyTyTI6DcUglox+Om4+XzdpR2wD4q78bW51E2JJLWeSoSq9mMlRJWyS5qHkrYVwmqdy1p446PBgyGCU8Q+H9tvJctvjO8kS3mMUvhBa8po8b1jhX78M0nUm45Ja/VzUoaGhJOTc68wiBpEnZFqm7Su0EUy68GRMPJ+WjDYnbZSHsi5vTSmE1XnMfDAZvLPw27RVO+VxKL7pJDwhkqC0hEnBCW2UDUHbJBIJbbDQBYTkXyNKH/spWXfpiA9BR24sQx3jJqLTbFMkfiOuiS5HnNNMo/SayyjbEVu3Aql6rJKZErgObRNYnzxN1vLZSh5VFt0j0RoPXknkoZeddmjaTIBOFVU/nvH01LoMZLpQz9c1MlCD1JUCbc0kUU4ZCGQspaihFkiXw2j9/OWZJnSMSbqHrkkaGj7TcYJvq7AHwe6lhXokEuXkD+hn+IdMH3B+c8kUQ+l0HoEdOwljTspJWybmt0gD1nZPRztuC75r1qSGu8uEPGY8m30EQ+OmwsZSir5a0aSgPIOmS/ubGZxTQaDqK1xB4Lmb1XtdTb9zjGR0nSHQZxAnGMysoYumaZGEsfEXOWmB18NutiotmSdeGJcN4+SOt3QBvCSIcDh8PuAS4NYv44HX4eb8r4SjLpLyCVJlQRLYZWoa2EilEw0DfD1PBItJpKrudRPo421MdGSCFHty/oR6mbBv0TUeRlqZowYtiFdZ+HWxa2fLyiR5u1fykOEkrtOcjHeaBrRSW4fnqBjHh4XHkT+ObkvWkEmXU/6U+xDy0DUZnYR8Cp8tr6J/zLxdOBS4DTg68DLnHNDMzsIfBQ4CLzUOfdjM3sU/pjUX8DXyS3OuQtq6W0iJFciYldurMYOg8J7PWQfaPC7c6tJgpPFKsor4CWVPM9D/FXJa0JiElYlxZF0iIihS2QSSXTDNQdWKT9qF50s0oynVUpNa+zS8y2SnS+mqyQ6ksz3aKr3eV5imJhenCwmq/QGd4UMP+iaC1uTBcLwe0DcG65uZ41lKJ0nFePWHQ61BbPG4qm8P4ucY3x5ulsk8osDfr+4+/LekOaOCfCkMsobMLxzTNoiz5eSZE26VylatYz4qzbqWZNYnnZbnWl+VVqd9zszHUs1qX8g/jHOSNoHrKkNxno4TTRSzasKRTFv6rcozEXUZnYG8Grgic65dTP7BP50vAuAtzvnLjWzdwOvBN4FvBR4D/6z8lfjD3D6W+CzzrmLQ5y/PivNdbGBKvnqirTu7YxQIo6V/IBrztYDbd3wjkqoJRLU38JYAZokB81tUyB5kM4xOf9GZmvVEHSgRwIaumk1Oc9bY7DIJJMTkJJzrrJHu2eUFLYsJZAP1rzs+fNY9jWYVJzal2MZ9IByHUC6m2EoeVACyncrqKSoxAS+76i0u5WFVUkwoiRxl8wAucmndJhcfH9D0s37cRQkYjsMSQQzdMmu3Gf6Y5Hc5JYv+qntPL9DIPYtPZMrtkveriUiLS26Gk17c+mdGHepb+sCoEq1JUl9qp9nA7ZPqsd8DOsiInjtbVPG3SxstjzfDbZj+hgA+81sEy/Y3AE8G/iD8PwS4A14oo7ay5hUF6cDn4mROedumJXYjaMkccnZSJMOp52npt7rYIh2pjWa+zyhOYBUCjaaHxVM8i7xK6nXSKqEnDA33fTgiuE2MgJSW5x28FzqyzGmOSCh2dFziSDekTY5myd7XrLD1ghMF2lincZ2WxPbudEks3yizAlGbZGlBUWNq2FOCJNObOs+iRhVanTiV5JGS5t+xtQlwZyMhqR61kldt7YdlLRin1dzYJ+000KJURHLodJ9dKudd8i06UORE2a+9a0nfrXdMSWU2lqhV3tqHrScWvb43JHqdbI10sqLvSvAPSFMtN+Padr/SzeWTRbVTzRRO+duN7O34SXkdTzhfg04FM6eBn8U6hnB/RHgY/iJ62XB753Ax83sL4DPAR90zv24lubtLn1FlQ9eCOqY2BdTZpMzEnLeeSLhqISrnb4hfbtmXIoxSdosSQH6gYOWQcuhA0gXG5WU4+yupBDjVdteiTR0ny+i6udqG9n/Y9IXZIqaqSdfXNM6NYl3k1T/k8Hkmm2lE4e+F3/VHKWTpk6wGn+EFqcX/neF56WFz9x8oAReIvXSxKJQe6oScYmMJusGtJNgyfShJFgSMtTUo/ZozWtpEbNkotB+nvf33IxVmugj8o+Dcxt2Kb2SRjPALxhCst+fTH09KObpfhGOSn2vgWWxUZvZqfhrtx6Dv5T234DnFoI6gHBNV+O5c+6KcHHA+eHZdWb2a865u0tpqnpvlHdyqAmjbVfBVvarcfVck2hUYph82CDkrh1iotJbsyPlYaG9gzrpHEqYk+1xhfdVYiilkRNrVKP16/mJJGrlj0VKCzr6vw7kgUwgjXpMSUwt8o5deStYyVY8gsaXcWqiyDWOXArWehq5+mJX23jLTRt5nevEpNraiOlJtaHRkJUzixemd43U0LaOotB+vF/8+1mYiLaxVspjXrYcqtGsZu74XKXoWUSted9HGj+Tj2AQGzWyVkKzv8Rf7Q8qqeeaaFu97Abzmj7OA34QSdXMLgPOBU4xs0GQqh8NVCVkAOfcffhFxo+a2afx9zAWjzo9YO2ryyXsRWWVTAklFVrt4Trj1xbqNH41mUCTMIeuqZqV7IJtEgzyfPJepjmAn6Rivrdo7irQ/OboUSdiaHasvE3ytQVdSFJCVbtzSarJ9/eW7LC13QpxAJbIUNFGCIrYxL2CX3wv/q8DvrQIVjIFlOyxUCY+Rb5VMqZfI995zBQx3ZJ9XbXe3N6tGJAmhnhbNkxP8nn+aqhNsKUFdu1Pk/NGSGR+UIQjDTvpmzJGx3FX1KxM7BLz8t+PgLPN7EA4T/p38JcGfAF4QQjzCmZfHPBsMzsQ3Cfjz6f+0U4z3qFDhw7LhEXudZ7XRn2NmX0SvwVvC7gOeC/+8P9LzeyNwe/9M6J5KvDPZraFnyDe55y7thb4dGOmKqoSR00lj8ilhVwCzT93VtOF2k5Lced5Atnq55oLXyXpWf3UFln6lFhNLqWv2xt5FxvcxN7nphs8l6p0K1NNki6587Cq9ubqvS4A5u/m2+Ryk1VjIc+VpefSAqCmm+dJ36mhJnHuhQanNnW1k6vUnSOv77ZF5O2gJIHWTGn5eMjrWU0XZO4+SaI+QLaOFNwlu7Pmo6T1at6PkbTZyXqQNb8MjZL8fsnvmmjKk+2kyBepVmiDBdqol/bigPdKyzYGRsFWvR0Vbp73ItomiIaanpFy/FUiHlX88+e1BajSZJKvwutiXh5W42hDzcbpCv666FdS03MzSm2vbww7rrjjO7HL5s9dFrb2fBJPlt+8XPNg3vrM0VanuX98Ng9p1/xmpT/ZfYTskpAwbeYVRalvDkh24f2F523jdp6JctZivUI/iNlHWlhU27ge9KSHTOlOj+iOY27o4KIxP1sXB3xnXKkU2TGg0mNpq11tNs5R67Q6MGonexVPGCuQc21hq7RfN0csW0mKyBcrJ4tYEuG89aBplPI0Tz1R8CvtOiDza8TlymFK8dbcOUpalmO6biPaxJdZRDir3kphtvPcCs/bUIu/NCHqRznaX+NXhLrPvbR9bxZODr+nhd815JQ62iVq7es1/+gX31cNLI659ez9folTJF+Rc3Rrad9N70yZ9ZXybrG0RP0DJ4TryuQ7ka7lee0chjayqpJG9ryxHcuVJbYS2dWIoDT1audTt05GjbOeC3G1lbOUl/z5VJ4LBFqKo+35dt7dTbxtz3Vxr6Za1+IqaQU7RSmuWt5KE3TbBFzbX1/axuhI29l2snCZx1eSflUzLPXdtokp3+paGtulHSCleqr1d524GvXk6nHt8vrUmVhaor45+7+oS1QqLe6RNflVN4XnzOEu+fVmhO2Jn0pukXyje0zTNqzSQNziF90jUofR51s0d28MKn5tz6ONUfPQl19XeR7d1vI8xqFlV6Kqudue5+7aczI/NyPsPHmMmNVH3Az/+DtueW9WvPMiD1saU20TQOlgpHnTLpmmZqVf+n8e7NQc1YZafR8P4/HS2qhPdB46dOjQYQf4oXPul/Y60qUk6g4dOnTokLAoLaFDhw4dOuwROqLu0KFDhyVHR9QdOnTosORYGFGb2QfM7C4z+5b4nWlmV5vZ9Wb2VTM7K/ibmb3DzG4ysxvM7CnyzkVm9nUze3H4/+1m9hp5foWZvU/+/3sz+6sFl+OtZvZ/Ia//YWanyLPXhXLcaGa/K/4vCeV4Tfj/L83sH+X5e8zsc/L/hWb2jr0qR6Fcp5jZJ0M5vmNm55jZaWb2WTP7Xvg9NYTtmdmHzOxKM3tS8LvOzM4M7oGZHTGzl0r8X9N2PJEws/NDe9xkZq8Nfk8ys6vM7BIzWyqBZQ/a5llmdn8YZ/HvvOOQ74WMleB3i5l9U8qzsLExoyy75q/gN8ra5rWtGXLOLeQPf+DSU4Bvid9ngOcG9wXAF8X93/jdOGcD1wT/eFPMAPjP4PdC4BPB3cMft3qVpHEV8IwFl+M5wCC43wK8JbifCHwDv4//McD3gX549in87qZLQ7meDnxF4rwGuFbCfwx48QLb5xLgVcG9CpwC/B3w2uD3WinX+cCfA48CPhD83gn8WXA/FX+8wL+E/08CfhrLciL/Qp1/H3hsKOc3Qju9H3gEcCFw/onO5x63zbOAT5+AfC9krAS/W4CHn+Cy7Jq/gv+D283PwiQJ59yXgPtyb+Ahwf1Q0ml7zwc+5Dyuxp/Kdzrl/e5fxp/cB/Ak4FvAYTM71czWgF/FnzuysHI45z7j0jncV+NPDozluNQ5t+Gc+wFwE3BWeJZvg70O+GUz229mD8UfO3A98OQQ7lzgyr0qh8LMHoLviO8P5Rk6fzTt8/EkQfj9/eAuXQSh7XAu8G7gzPD/WcDXnXPzfB+xaJwF3OScu9k5N8QP/ufT3NK9yBMqt4U9apsTggWOleOOBfLXjnC8Vb7XAG81s1uBtwGvC/5nALdKuNuAM5xzh/H3M34V+DiA85cNbJnZL+IJ4iq8NHoO8DTghjAgjxf+GD+bQqUcwX0Zvhxfdc4dDp33erxkfTa+DFcD55rZz+O3Tmpce4nHAncDHwwmjPeZ2UnAo5xzdwCE30eG8FcAvwVcDvxD8LuSJlF/CdgwfzLiuXgiXwbU2uRi/KFi5yA3Dy0B9qJtAH4zU68fdxzLUMOOxoqE+YKU56KF53Yau+avgP1Z27yYFhzvLxP/FLjIOffvZvYivNRwHjPORHLOvQl4U/YsSnPn4jvnGcF9PwuSQksws9fjP+r7SPQqBIvluIQkEUXEcuzHTzjfA/4GP1AXWY4BXq270PmTES/Gq9NFhEnlJZnfLWa2amY/B/wKcCPedPMMfJn+aVGZ3yaKbeKcuw6f12XDrtsm4H+cc89bUB63jT0YKwC/7Zy7ZzE5nAt7xV/rzrkzp1+p43hL1K/Az5bgb4mJqs5t+NvJI9ouIYjS3JPxpo+r8ZLRcZPkzOwVwPOAP3TB8MTOy3EOnqi/g7fdLboctwG3OeeuCf9/Ek8OdwaVjfB7V0s8V+HPI78j1MHVwDPx7Xr1IjK+A2y3TU409qptlgZ7NFaWAXvFX9vG8SbqH+PVNPAX434vuC8HXh5WT88G7o9qXgVfxjf8fc65kfM3x5xCIryFwszOB/4a+D3n3FF5dDnwEjNbM7PHAI8HvjIjqivxZo9HOOfuCp34brzNa2EStXPuJ8CtZvaE4BUvgrgc3xmh5SKIgC8DF5Hq/Crg5cBPgl11GXAt8Hgze4yZreKlz8tPcJ6q2MO2WQrs4VhZBuwVf20fC1w1/Rj+pvJN/IzzSuA38Ls0voG3yT41hDX8LoLv4206T2uJuw88ALxR/P4VuPE4leMmvE3q+vD3bgn/+lCOGwkrxC3x/y/wYfn/DfiLqQeLapuQzpl429kN+FX2U4GHAZ/Hd8DPA6e1xPF0vIp3nvjdArxnkXnfQVkvAL4b2uX1Jzo/i24b/K6P+6V/Xg+84Djke2FjJfSrb0o8HzoBZdkr/hplbfPmtvx0Z3106NChw5JjqTb6d+jQoUOHaXRE3aFDhw5Ljo6oO3To0GHJ0RF1hw4dOiw5OqLu0KFDhyVHR9QdOmqJLxgAAAAcSURBVHTosOToiLpDhw4dlhwdUXfo0KHDkuP/AYd/SP1EGcCbAAAAAElFTkSuQmCC" style="max-width:100%; margin: auto; display: block; "/></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The following more complicated example shows how complex interactive plots can be generated with relatively little code, and also demonstrates how different HoloViews elements can be combined together. In the following visualization, the black dot denotes a specific longitude, latitude location <em>(0,10)</em>, and the curve is a sample of the <code>surface_temperature</code> at that location.  The curve is unaffected by the <code>time</code> slider because it already lays out time along the x axis:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [11]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">temp_curve</span> <span class="o">=</span> <span class="n">hv</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="n">xr_dataset</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">longitude</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">latitude</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="n">kdims</span><span class="o">=</span><span class="p">[</span><span class="s1">'time'</span><span class="p">])</span>
+<span class="n">temp_map</span> <span class="o">=</span> <span class="n">xr_dataset</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">Image</span><span class="p">,[</span><span class="s1">'longitude'</span><span class="p">,</span> <span class="s1">'latitude'</span><span class="p">])</span> <span class="o">*</span> <span class="n">gv</span><span class="o">.</span><span class="n">Points</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">)])</span>
+<span class="p">(</span><span class="n">temp_map</span> <span class="o">+</span> <span class="n">temp_curve</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="n">aspect</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">xrotation</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">Points</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">global_extent</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[11]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div class="hololayout row row-fluid">
+<div class="holoframe" id="display_area6b65eacb07a5471e93deb7a1ed93badc">
+<div id="_anim_img6b65eacb07a5471e93deb7a1ed93badc">
+</div>
+</div>
+<div class="holowidgets" id="widget_area6b65eacb07a5471e93deb7a1ed93badc">
+<form class="holoform well" id="form6b65eacb07a5471e93deb7a1ed93badc">
+<div class="form-group control-group holoformgroup" style="">
+<label for="textInput6b65eacb07a5471e93deb7a1ed93badc_time">
+<strong>time:</strong>
+</label>
+<div class="holowell">
+<div class="hologroup">
+<input class="holotext form-control input-small" id="textInput6b65eacb07a5471e93deb7a1ed93badc_time" readonly="" type="text" value=""/>
+</div>
+<div class="holoslider" id="_anim_widget6b65eacb07a5471e93deb7a1ed93badc_time"></div>
+</div>
+</div>
+</form>
+</div>
+</div>
+<script type="application/javascript">/* Instantiate the MPLSelectionWidget class. */
+/* The IDs given should match those used in the template above. */
+var widget_ids = new Array(1);
+
+
+widget_ids[0] = "_anim_widget6b65eacb07a5471e93deb7a1ed93badc_time";
+
+
+function create_widget() {
+  var frame_data = {};
+  var dim_vals = ['2011-08-16T12:00:00.000000000'];
+  var keyMap = {"('2011-08-16T12:00:00.000000000',)": 0, "('2011-09-16T00:00:00.000000000',)": 1, "('2011-10-16T12:00:00.000000000',)": 2, "('2011-11-16T00:00:00.000000000',)": 3, "('2011-12-16T12:00:00.000000000',)": 4, "('2012-01-16T12:00:00.000000000',)": 5};
+  var notFound = "<h2 style='vertical-align: middle>No frame at selected dimension value.<h2>";
+
+  var anim = new HoloViews.MPLSelectionWidget(frame_data, "6b65eacb07a5471e93deb7a1ed93badc", widget_ids,
+  keyMap, dim_vals, notFound, true, "default",
+  true, "./", false, "140115100734240");
+
+  HoloViews.index['140115100734240'] = anim;
+}
+
+
+
+
+HoloViews.init_slider('6b65eacb07a5471e93deb7a1ed93badc', '140115100734240', 'time', ['2011-08-16T12:00:00.000000000', '2011-09-16T00:00:00.000000000', '2011-10-16T12:00:00.000000000', '2011-11-16T00:00:00.000000000', '2011-12-16T12:00:00.000000000', '2012-01-16T12:00:00.000000000'], {}, ['2011-08-16T12:00:00.000000000', '2011-09-16T00:00:00.000000000', '2011-10-16T12:00:00.000000000', '2011-11-16T00:00:00.000000000', '2011-12-16T12:00:00.000000000', '2012-01-16T12:00:00.000000000'], false, 1, 0, 'None', 0, 50, 'https://code.jquery.com/ui/1.10.4/jquery-ui.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js')
+
+
+
+
+create_widget();
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Overlaying-data-and-normalization">Overlaying data and normalization<a class="anchor-link" href="#Overlaying-data-and-normalization">¶</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's view the surface temperatures together with the global coastline:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [12]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="p">(</span><span class="n">xr_dataset</span><span class="o">.</span><span class="n">to</span><span class="o">.</span><span class="n">image</span><span class="p">([</span><span class="s1">'longitude'</span><span class="p">,</span> <span class="s1">'latitude'</span><span class="p">])</span> <span class="o">*</span> <span class="n">gf</span><span class="o">.</span><span class="n">coastline</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Geostationary</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'Greens'</span><span class="p">,</span> <span class="n">xaxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[12]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div class="hololayout row row-fluid">
+<div class="holoframe" id="display_area7b181add66804104986189c637e3ef34">
+<div id="_anim_img7b181add66804104986189c637e3ef34">
+</div>
+</div>
+<div class="holowidgets" id="widget_area7b181add66804104986189c637e3ef34">
+<form class="holoform well" id="form7b181add66804104986189c637e3ef34">
+<div class="form-group control-group holoformgroup" style="">
+<label for="textInput7b181add66804104986189c637e3ef34_time">
+<strong>time:</strong>
+</label>
+<div class="holowell">
+<div class="hologroup">
+<input class="holotext form-control input-small" id="textInput7b181add66804104986189c637e3ef34_time" readonly="" type="text" value=""/>
+</div>
+<div class="holoslider" id="_anim_widget7b181add66804104986189c637e3ef34_time"></div>
+</div>
+</div>
+</form>
+</div>
+</div>
+<script type="application/javascript">/* Instantiate the MPLSelectionWidget class. */
+/* The IDs given should match those used in the template above. */
+var widget_ids = new Array(1);
+
+
+widget_ids[0] = "_anim_widget7b181add66804104986189c637e3ef34_time";
+
+
+function create_widget() {
+  var frame_data = {};
+  var dim_vals = ['2011-08-16T12:00:00.000000000'];
+  var keyMap = {"('2011-08-16T12:00:00.000000000',)": 0, "('2011-09-16T00:00:00.000000000',)": 1, "('2011-10-16T12:00:00.000000000',)": 2, "('2011-11-16T00:00:00.000000000',)": 3, "('2011-12-16T12:00:00.000000000',)": 4, "('2012-01-16T12:00:00.000000000',)": 5};
+  var notFound = "<h2 style='vertical-align: middle>No frame at selected dimension value.<h2>";
+
+  var anim = new HoloViews.MPLSelectionWidget(frame_data, "7b181add66804104986189c637e3ef34", widget_ids,
+  keyMap, dim_vals, notFound, true, "default",
+  true, "./", false, "140115091184384");
+
+  HoloViews.index['140115091184384'] = anim;
+}
+
+
+
+
+HoloViews.init_slider('7b181add66804104986189c637e3ef34', '140115091184384', 'time', ['2011-08-16T12:00:00.000000000', '2011-09-16T00:00:00.000000000', '2011-10-16T12:00:00.000000000', '2011-11-16T00:00:00.000000000', '2011-12-16T12:00:00.000000000', '2012-01-16T12:00:00.000000000'], {}, ['2011-08-16T12:00:00.000000000', '2011-09-16T00:00:00.000000000', '2011-10-16T12:00:00.000000000', '2011-11-16T00:00:00.000000000', '2011-12-16T12:00:00.000000000', '2012-01-16T12:00:00.000000000'], false, 1, 0, 'None', 0, 50, 'https://code.jquery.com/ui/1.10.4/jquery-ui.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js')
+
+
+
+
+create_widget();
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Notice that every frame individually uses the full dynamic range of the Greens color map. This is because normalization is set to <code>+framewise</code> at the top of the notebook, which means every frame is normalized independently. This sort of normalization can be computed on an as-needed basis, using whatever values are found in the current data being shown in a given frame, but it won't let you see how different frames compare to each other.</p>
+<p>To control normalization, we need to decide on the normalization limits. Let's see the maximum temperature in the cube, and use it to set a normalization range by using the redim method:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [13]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">max_surface_temp</span> <span class="o">=</span> <span class="n">xr_dataset</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="s1">'surface_temperature'</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">max_surface_temp</span><span class="p">)</span>
+<span class="n">srfc_temps</span> <span class="o">=</span> <span class="n">xr_dataset</span><span class="o">.</span><span class="n">redim</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">surface_temperature</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">max_surface_temp</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">Image</span><span class="p">,[</span><span class="s1">'longitude'</span><span class="p">,</span> <span class="s1">'latitude'</span><span class="p">])</span>
+
+<span class="p">(</span><span class="n">srfc_temps</span> <span class="o">*</span> <span class="n">gf</span><span class="o">.</span><span class="n">coastline</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">crs</span><span class="o">.</span><span class="n">Geostationary</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'Greens'</span><span class="p">,</span> <span class="n">xaxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>317.331787109375
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt output_prompt">Out[13]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div class="hololayout row row-fluid">
+<div class="holoframe" id="display_area905d7c6dfad4419aa8dfd841aa08b64f">
+<div id="_anim_img905d7c6dfad4419aa8dfd841aa08b64f">
+</div>
+</div>
+<div class="holowidgets" id="widget_area905d7c6dfad4419aa8dfd841aa08b64f">
+<form class="holoform well" id="form905d7c6dfad4419aa8dfd841aa08b64f">
+<div class="form-group control-group holoformgroup" style="">
+<label for="textInput905d7c6dfad4419aa8dfd841aa08b64f_time">
+<strong>time:</strong>
+</label>
+<div class="holowell">
+<div class="hologroup">
+<input class="holotext form-control input-small" id="textInput905d7c6dfad4419aa8dfd841aa08b64f_time" readonly="" type="text" value=""/>
+</div>
+<div class="holoslider" id="_anim_widget905d7c6dfad4419aa8dfd841aa08b64f_time"></div>
+</div>
+</div>
+</form>
+</div>
+</div>
+<script type="application/javascript">/* Instantiate the MPLSelectionWidget class. */
+/* The IDs given should match those used in the template above. */
+var widget_ids = new Array(1);
+
+
+widget_ids[0] = "_anim_widget905d7c6dfad4419aa8dfd841aa08b64f_time";
+
+
+function create_widget() {
+  var frame_data = {};
+  var dim_vals = ['2011-08-16T12:00:00.000000000'];
+  var keyMap = {"('2011-08-16T12:00:00.000000000',)": 0, "('2011-09-16T00:00:00.000000000',)": 1, "('2011-10-16T12:00:00.000000000',)": 2, "('2011-11-16T00:00:00.000000000',)": 3, "('2011-12-16T12:00:00.000000000',)": 4, "('2012-01-16T12:00:00.000000000',)": 5};
+  var notFound = "<h2 style='vertical-align: middle>No frame at selected dimension value.<h2>";
+
+  var anim = new HoloViews.MPLSelectionWidget(frame_data, "905d7c6dfad4419aa8dfd841aa08b64f", widget_ids,
+  keyMap, dim_vals, notFound, true, "default",
+  true, "./", false, "140115090323272");
+
+  HoloViews.index['140115090323272'] = anim;
+}
+
+
+
+
+HoloViews.init_slider('905d7c6dfad4419aa8dfd841aa08b64f', '140115090323272', 'time', ['2011-08-16T12:00:00.000000000', '2011-09-16T00:00:00.000000000', '2011-10-16T12:00:00.000000000', '2011-11-16T00:00:00.000000000', '2011-12-16T12:00:00.000000000', '2012-01-16T12:00:00.000000000'], {}, ['2011-08-16T12:00:00.000000000', '2011-09-16T00:00:00.000000000', '2011-10-16T12:00:00.000000000', '2011-11-16T00:00:00.000000000', '2011-12-16T12:00:00.000000000', '2012-01-16T12:00:00.000000000'], false, 1, 0, 'None', 0, 50, 'https://code.jquery.com/ui/1.10.4/jquery-ui.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js')
+
+
+
+
+create_widget();
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>By specifying the normalization range we can reveal different aspects of the data. In the example above we can see a cooling effect over time as the dark green areas close to the top of the normalization range (317K) vanish. Values outside this range are clipped to the ends of the color map.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Lastly, here is a demo of a conversion from <code>surface_temperature</code> to <code>FilledContours</code>:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [14]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">xr_dataset</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">FilledContours</span><span class="p">,[</span><span class="s1">'longitude'</span><span class="p">,</span> <span class="s1">'latitude'</span><span class="p">])</span> <span class="o">*</span> <span class="n">gf</span><span class="o">.</span><span class="n">coastline</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[14]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div class="hololayout row row-fluid">
+<div class="holoframe" id="display_areabfc5069751214db28797f5aaad725e6c">
+<div id="_anim_imgbfc5069751214db28797f5aaad725e6c">
+</div>
+</div>
+<div class="holowidgets" id="widget_areabfc5069751214db28797f5aaad725e6c">
+<form class="holoform well" id="formbfc5069751214db28797f5aaad725e6c">
+<div class="form-group control-group holoformgroup" style="">
+<label for="textInputbfc5069751214db28797f5aaad725e6c_time">
+<strong>time:</strong>
+</label>
+<div class="holowell">
+<div class="hologroup">
+<input class="holotext form-control input-small" id="textInputbfc5069751214db28797f5aaad725e6c_time" readonly="" type="text" value=""/>
+</div>
+<div class="holoslider" id="_anim_widgetbfc5069751214db28797f5aaad725e6c_time"></div>
+</div>
+</div>
+</form>
+</div>
+</div>
+<script type="application/javascript">/* Instantiate the MPLSelectionWidget class. */
+/* The IDs given should match those used in the template above. */
+var widget_ids = new Array(1);
+
+
+widget_ids[0] = "_anim_widgetbfc5069751214db28797f5aaad725e6c_time";
+
+
+function create_widget() {
+  var frame_data = {};
+  var dim_vals = ['2011-08-16T12:00:00.000000000'];
+  var keyMap = {"('2011-08-16T12:00:00.000000000',)": 0, "('2011-09-16T00:00:00.000000000',)": 1, "('2011-10-16T12:00:00.000000000',)": 2, "('2011-11-16T00:00:00.000000000',)": 3, "('2011-12-16T12:00:00.000000000',)": 4, "('2012-01-16T12:00:00.000000000',)": 5};
+  var notFound = "<h2 style='vertical-align: middle>No frame at selected dimension value.<h2>";
+
+  var anim = new HoloViews.MPLSelectionWidget(frame_data, "bfc5069751214db28797f5aaad725e6c", widget_ids,
+  keyMap, dim_vals, notFound, true, "default",
+  true, "./", false, "140115087906912");
+
+  HoloViews.index['140115087906912'] = anim;
+}
+
+
+
+
+HoloViews.init_slider('bfc5069751214db28797f5aaad725e6c', '140115087906912', 'time', ['2011-08-16T12:00:00.000000000', '2011-09-16T00:00:00.000000000', '2011-10-16T12:00:00.000000000', '2011-11-16T00:00:00.000000000', '2011-12-16T12:00:00.000000000', '2012-01-16T12:00:00.000000000'], {}, ['2011-08-16T12:00:00.000000000', '2011-09-16T00:00:00.000000000', '2011-10-16T12:00:00.000000000', '2011-11-16T00:00:00.000000000', '2011-12-16T12:00:00.000000000', '2012-01-16T12:00:00.000000000'], false, 1, 0, 'None', 0, 50, 'https://code.jquery.com/ui/1.10.4/jquery-ui.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js')
+
+
+
+
+create_widget();
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As you can see, it's quite simple to expose any data you like from your Iris cube or xarray, easily and flexibly creating interactive or static visualizations.</p>
+</div>
+</div>
+</div>
+<hr class="docutils"/>
+<p><a class="reference external" href="https://raw.githubusercontent.com/holoviz/geoviews/master/examples/user_guide/Gridded_Datasets_I.ipynb">Right click to download this notebook from GitHub.</a></p>
+</div>
+</div>
+</div>
+<!-- END MAIN BODY OF DOCS ––––––––––––– -->
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61554933-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<!-- MathJax Config -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
